@@ -10,7 +10,7 @@
             {
                 "type": "probe",
                 "name": "we-can-request-sunset",
-                "tolerance": 200,
+                "tolerance": 200, 500,
                 "provider": {
                     "type": "http",
                     "timeout": 3,
