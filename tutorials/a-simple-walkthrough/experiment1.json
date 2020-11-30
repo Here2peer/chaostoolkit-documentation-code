@@ -8,33 +8,7 @@
         "probes": [
             {
                 "type": "probe",
-                "name": "the-astre-service-must-be-running",
-                "tolerance": true,
-                "provider": {
-                    "type": "python",
-                    "module": "os.path",
-                    "func": "exists",
-                    "arguments": {
-                        "path": "astre.pid"
-                    }
-                }
-            },
-            {
-                "type": "probe",
-                "name": "the-sunset-service-must-be-running",
-                "tolerance": true,
-                "provider": {
-                    "type": "python",
-                    "module": "os.path",
-                    "func": "exists",
-                    "arguments": {
-                        "path": "sunset.pid"
-                    }
-                }
-            },
-            {
-                "type": "probe",
-                "name": "we-can-request-sunset-not-local",
+                "name": "we-can-request-sunset",
                 "tolerance": 200,
                 "provider": {
                     "type": "http",
