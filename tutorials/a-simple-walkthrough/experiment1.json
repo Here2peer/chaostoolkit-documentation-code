@@ -34,7 +34,7 @@
             },
             {
                 "type": "probe",
-                "name": "we-can-request-sunset",
+                "name": "we-can-request-sunset-not-local",
                 "tolerance": 200,
                 "provider": {
                     "type": "http",

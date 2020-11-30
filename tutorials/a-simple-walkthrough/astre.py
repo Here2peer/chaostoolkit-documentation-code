@@ -43,6 +43,7 @@ def run():
     cherrypy.config.update({
         "environment": "production",
         "log.screen": True,
+        "server.socket_host": '192.168.1.3',
         "server.socket_port": 8444,
         "server.ssl_module": "builtin",
         "server.ssl_private_key": os.path.join(cur_dir, "key.pem"),
