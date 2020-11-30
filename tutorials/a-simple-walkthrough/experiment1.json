@@ -40,7 +40,7 @@
                     "type": "http",
                     "timeout": 3,
                     "verify_tls": false,
-                    "url": "https://localhost:8443/city/Paris"
+                    "url": "https://192.168.1.3:8443/city/Paris"
                 }
             }
         ]
