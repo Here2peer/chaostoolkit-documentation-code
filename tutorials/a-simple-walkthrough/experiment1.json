@@ -6,6 +6,7 @@
     "steady-state-hypothesis": {
         "title": "Application responds",
         "probes": [
+		
             {
                 "type": "probe",
                 "name": "we-can-request-sunset",
