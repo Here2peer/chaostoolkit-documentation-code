@@ -1,7 +1,7 @@
 {
-	"version": "1.0.0",
-	"title": "What is the impact of an expired certificate on our application chain?",
-	"description": "If a certificate expires, we should gracefully deal with the issue.",
+	"version": "0.0.1",
+	"title": "What is the impact of killing a pod?",
+	"description": "If the pod is killed, we should spin up a new pod.",
 	"tags": ["tls"],
 	"steady-state-hypothesis": {
 		"title": "Application responds",
@@ -13,7 +13,7 @@
 				"type": "http",
 				"timeout": 3,
 				"verify_tls": false,
-				"url": "192.168.1.3:30571/all"
+				"url": "http://192.168.1.3:30571/all"
 			}
 		}]
 	},
@@ -26,7 +26,7 @@
 				"type": "http",
 				"timeout": 3,
 				"verify_tls": false,
-				"url": "192.168.1.3:30571/all"
+				"url": "http://192.168.1.3:30571/all"
 			}
 		}
 	]
