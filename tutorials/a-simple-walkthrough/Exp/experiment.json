@@ -37,18 +37,15 @@
                 "after": 5
             }
 		},
-		"title": "Application responds",
-        "probes": [
-            {
-                "type": "probe",
-                "name": "we-can-request-list-of-books",
-                "tolerance": 200,
-                "provider": {
-                    "type": "http",
-                    "timeout": 3,
-                    "verify_tls": false,
-                    "url": "192.168.1.3:30571/all"
-                }
+            "type": "probe",
+            "name": "we-can-request-list-of-books",
+            "tolerance": 200,
+            "provider": {
+                "type": "http",
+                "timeout": 3,
+                "verify_tls": false,
+                "url": "192.168.1.3:30571/all"
             }
-        ]
+        }
+    ]
 }
