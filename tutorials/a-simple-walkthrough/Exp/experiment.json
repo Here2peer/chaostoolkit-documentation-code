@@ -16,6 +16,7 @@
 				"type": "python",
 				"module": "chaosk8s.probes",
 				"func": "microservice_available_and_healthy",
+				"url": "http://192.168.1.3:8001/"
 				"arguments": {
 					"name": "book"
 				}
