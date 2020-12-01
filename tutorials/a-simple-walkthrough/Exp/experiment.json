@@ -20,23 +20,7 @@
         ]
     },
     "method": [
-        {
-            "type": "action",
-            "name": "terminate-db-pod",
-            "provider": {
-                "type": "python",
-                "module": "chaosk8s.pod.actions",
-                "func": "terminate_pods",
-                "arguments": {
-                    "label_selector": "app=my-app",
-                    "name_pattern": "my-app-[0-9]$",
-                    "rand": true
-                }
-            },
-            "pauses": {
-                "after": 5
-            }
-		},
+        
 		{
             "type": "probe",
             "name": "we-can-request-list-of-books",
