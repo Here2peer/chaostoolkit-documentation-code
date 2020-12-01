@@ -3,6 +3,21 @@
 	"title": "What is the impact of killing a pod?",
 	"description": "If the pod is killed, we should spin up a new pod.",
 	"tags": ["tls"],
+	{
+	"secrets": {
+			"kubernetes": {
+				"KUBERNETES_HOST": "http://192.168.1.3:8001",
+				"KUBERNETES_CERT_FILE": {
+					"type": "env",
+					"key": "cert.ca"
+				},
+				"KUBERNETES_KEY_FILE": {
+					"type": "env",
+					"key": "key.ca"
+				}
+			}
+		}
+	},
 	"steady-state-hypothesis": {
 		"title": "Application responds",
 		"probes": [{
