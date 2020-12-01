@@ -3,7 +3,7 @@
 	"title": "What is the impact of killing a pod?",
 	"description": "If the pod is killed, we should spin up a new pod.",
 	"tags": ["kubernetes"],
-    
+
 
 	"steady-state-hypothesis": {
 		"title": "Verifying service remains healthy",
@@ -16,7 +16,7 @@
 				"type": "python",
 				"module": "chaosk8s.probes",
 				"func": "microservice_available_and_healthy",
-				"url": "http://192.168.1.3:8001/"
+				"url": "http://192.168.1.3:8001/",
 				"arguments": {
 					"name": "book"
 				}
