@@ -37,6 +37,7 @@
                 "after": 5
             }
 		},
+		{
             "type": "probe",
             "name": "we-can-request-list-of-books",
             "tolerance": 200,
