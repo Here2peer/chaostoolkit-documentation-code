@@ -1,0 +1,150 @@
+{
+  "chaoslib-version": "1.15.1",
+  "platform": "Linux-4.19.128-microsoft-standard-x86_64-with-glibc2.29",
+  "node": "DESKTOP-72KKKO4",
+  "experiment": {
+    "version": "0.0.1",
+    "title": "What is the impact of killing a pod?",
+    "description": "If the pod is killed, we should spin up a new pod.",
+    "tags": [
+      "tls"
+    ],
+    "steady-state-hypothesis": {
+      "title": "Application responds",
+      "probes": [
+        {
+          "type": "probe",
+          "name": "we-can-request-list-of-books",
+          "tolerance": 200,
+          "provider": {
+            "type": "http",
+            "timeout": 3,
+            "verify_tls": false,
+            "url": "http://192.168.1.3:30571/all"
+          }
+        }
+      ]
+    },
+    "method": [
+      {
+        "type": "action",
+        "name": "we-can-request-list-of-books",
+        "tolerance": 200,
+        "provider": {
+          "type": "http",
+          "timeout": 3,
+          "verify_tls": false,
+          "url": "http://192.168.1.3:30571/all"
+        }
+      }
+    ],
+    "dry": false
+  },
+  "start": "2020-12-01T10:58:52.045171",
+  "status": "completed",
+  "deviated": false,
+  "steady_states": {
+    "before": {
+      "steady_state_met": true,
+      "probes": [
+        {
+          "activity": {
+            "type": "probe",
+            "name": "we-can-request-list-of-books",
+            "tolerance": 200,
+            "provider": {
+              "type": "http",
+              "timeout": 3,
+              "verify_tls": false,
+              "url": "http://192.168.1.3:30571/all"
+            }
+          },
+          "output": {
+            "status": 200,
+            "headers": {
+              "Content-Type": "application/json",
+              "Transfer-Encoding": "chunked",
+              "Date": "Tue, 01 Dec 2020 10:58:52 GMT",
+              "Keep-Alive": "timeout=60",
+              "Connection": "keep-alive"
+            },
+            "body": []
+          },
+          "status": "succeeded",
+          "start": "2020-12-01T10:58:52.045858",
+          "end": "2020-12-01T10:58:52.058120",
+          "duration": 0.012262,
+          "tolerance_met": true
+        }
+      ]
+    },
+    "after": {
+      "steady_state_met": true,
+      "probes": [
+        {
+          "activity": {
+            "type": "probe",
+            "name": "we-can-request-list-of-books",
+            "tolerance": 200,
+            "provider": {
+              "type": "http",
+              "timeout": 3,
+              "verify_tls": false,
+              "url": "http://192.168.1.3:30571/all"
+            }
+          },
+          "output": {
+            "status": 200,
+            "headers": {
+              "Content-Type": "application/json",
+              "Transfer-Encoding": "chunked",
+              "Date": "Tue, 01 Dec 2020 10:58:52 GMT",
+              "Keep-Alive": "timeout=60",
+              "Connection": "keep-alive"
+            },
+            "body": []
+          },
+          "status": "succeeded",
+          "start": "2020-12-01T10:58:52.067883",
+          "end": "2020-12-01T10:58:52.077344",
+          "duration": 0.009461,
+          "tolerance_met": true
+        }
+      ]
+    },
+    "during": []
+  },
+  "run": [
+    {
+      "activity": {
+        "type": "action",
+        "name": "we-can-request-list-of-books",
+        "tolerance": 200,
+        "provider": {
+          "type": "http",
+          "timeout": 3,
+          "verify_tls": false,
+          "url": "http://192.168.1.3:30571/all"
+        }
+      },
+      "output": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json",
+          "Transfer-Encoding": "chunked",
+          "Date": "Tue, 01 Dec 2020 10:58:52 GMT",
+          "Keep-Alive": "timeout=60",
+          "Connection": "keep-alive"
+        },
+        "body": []
+      },
+      "status": "succeeded",
+      "start": "2020-12-01T10:58:52.058618",
+      "end": "2020-12-01T10:58:52.067470",
+      "duration": 0.008852
+    }
+  ],
+  "rollbacks": [],
+  "end": "2020-12-01T10:58:52.077946",
+  "duration": 0.03937196731567383
+}
