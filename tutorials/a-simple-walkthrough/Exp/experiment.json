@@ -19,9 +19,6 @@
 			}
 		}
 	},
-
-
-
 	"steady-state-hypothesis": {
 		"title": "Verifying service remains healthy",
 		"probes": [{
@@ -39,7 +36,6 @@
 			}
 		}]
 	},
-
 	"method": [{
 		"type": "action",
 		"name": "we-can-request-list-of-books",
