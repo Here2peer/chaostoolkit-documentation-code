@@ -5,15 +5,17 @@
 	"tags": ["kubernetes"],
 
 	"secrets": {
-		"kubernetes": {
-			"KUBERNETES_HOST": "192.168.1.3:8001",
-			"KUBERNETES_CERT_FILE": {
-				"type": "env",
-				"key": "kubecert"
-			},
-			"KUBERNETES_KEY_FILE": {
-				"type": "env",
-				"key": "kubekey"
+		"k8s": {
+			"kubernetes": {
+				"KUBERNETES_HOST": "192.168.1.3:8001",
+				"KUBERNETES_CERT_FILE": {
+					"type": "env",
+					"key": "kubecert"
+				},
+				"KUBERNETES_KEY_FILE": {
+					"type": "env",
+					"key": "kubekey"
+				}
 			}
 		}
 	},
@@ -25,6 +27,7 @@
 		"probes": [{
 			"name": "all-our-microservices-should-be-healthy",
 			"type": "probe",
+            "secrets": ["k8s"],
 			"tolerance": true,
 			"provider": {
 				"type": "python",
