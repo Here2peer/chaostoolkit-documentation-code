@@ -27,7 +27,7 @@
 			"type": "probe",
 			"tolerance": true,
 			"provider": {
-				"type": "http",
+				"type": "python",
 				"module": "chaosk8s.probes",
 				"func": "microservice_available_and_healthy",
 				"arguments": {
