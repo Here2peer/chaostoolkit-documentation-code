@@ -7,6 +7,16 @@ metadata:
   name: Admin_rechten_aan_default
 
   namespace: default
+rules:
+- apiGroups: [""]
+  resources:
+  - namespaces
+  - endpoints
+  - services
+  - nodes
+  - nodes/proxy
+  - pods
+
 
 subjects:
 
