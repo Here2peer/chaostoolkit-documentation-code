@@ -20,22 +20,24 @@
 		}
 	},
 	"steady-state-hypothesis": {
-		"title": "Verifying service remains healthy",
-		"probes": [{
-			"name": "all-our-microservices-should-be-healthy",
-			"type": "probe",
-            "secrets": ["k8s"],
-			"tolerance": true,
-			"provider": {
-				"type": "python",
-				"module": "chaosk8s.deployment.probes",
-				"func": "deployment_available_and_healthy",
-				"arguments": {
-					"name": ""
-				}
-			}
-		}]
-	},
+        "title": "Verifying service remains healthy",
+        "probes": [
+            {
+                "name": "all-our-microservices-should-be-healthy",
+                "type": "probe",
+                "tolerance": true,
+                "secrets": ["k8s"],
+                "provider": {
+                    "type": "python",
+                    "module": "chaosk8s.probes",
+                    "func": "microservice_available_and_healthy",
+                    "arguments": {
+                        "name": "postgres"
+                    }
+                }
+            }
+        ]
+    },
 	"method": [{
 		"type": "action",
 		"name": "we-can-request-list-of-books",
