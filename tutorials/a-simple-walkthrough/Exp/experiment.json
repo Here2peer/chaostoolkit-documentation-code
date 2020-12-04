@@ -63,21 +63,8 @@
 				}
 			},
             "pauses": {
-                "after": 5
+                "after": 10
             }
-		},
-		{
-			"type": "probe",
-			"name": "deployment-fully-available",
-			"provider": {
-				"type": "python",
-				"module": "chaosk8s.deployment.probes",
-				"func": "deployment_fully_available",
-				"arguments": {
-					"name": "book",
-					"timeout": 30
-				}
-			}
 		},
 		{
 			"type": "action",
