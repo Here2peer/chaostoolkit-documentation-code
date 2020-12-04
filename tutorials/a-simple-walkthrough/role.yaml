@@ -1,0 +1,25 @@
+kind: RoleBinding
+
+apiVersion: rbac.authorization.k8s.io/v1
+
+metadata:
+
+  name: Admin_rechten_aan_default
+
+  namespace: default
+
+subjects:
+
+  - kind: User
+
+    apiGroup: rbac.authorization.k8s.io
+
+    name: default
+
+roleRef:
+
+  apiGroup: rbac.authorization.k8s.io
+
+  kind: ClusterRole
+
+  name: admin
