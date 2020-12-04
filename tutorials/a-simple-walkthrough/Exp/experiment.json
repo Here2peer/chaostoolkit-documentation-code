@@ -45,7 +45,8 @@
 			}
 		}]
 	},
-	"method": [{
+	"method": [
+		{
 			"type": "action",
 			"name": "terminate-api-pod",
 			"provider": {
@@ -61,10 +62,19 @@
 					"order": "alphabetic",
 					"all": false
 				}
-			},
-			"pauses": {
-				"after": 5
 			}
+		},
+		{
+			"name": "deployment-fully-available",
+			"type": "probe"
+			"provider": {
+				"type": "python"
+				"module": "chaosk8s.deployment.probes",
+				"func": "deployment_fully_available",
+				"arguments": {
+				  "name": "book"
+				},
+			},
 		},
 		{
 			"type": "action",
