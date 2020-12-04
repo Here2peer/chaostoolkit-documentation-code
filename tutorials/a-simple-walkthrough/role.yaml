@@ -1,35 +1,12 @@
-kind: RoleBinding
-
 apiVersion: rbac.authorization.k8s.io/v1
-
+kind: ClusterRoleBinding
 metadata:
-
-  name: Admin_rechten_aan_default
-
-  namespace: default
-rules:
-- apiGroups: [""]
-  resources:
-  - namespaces
-  - endpoints
-  - services
-  - nodes
-  - nodes/proxy
-  - pods
-
-
-subjects:
-
-  - kind: User
-
-    apiGroup: rbac.authorization.k8s.io
-
-    name: default
-
+  name: admin-user
 roleRef:
-
   apiGroup: rbac.authorization.k8s.io
-
   kind: ClusterRole
-
-  name: admin
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: admin-user
+  namespace: kube-system
