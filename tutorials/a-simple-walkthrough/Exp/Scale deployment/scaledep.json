@@ -50,9 +50,6 @@
 					"ns": "default",
 					"replicas": 10
 				}
-			},
-			"pauses": {
-				"after": 10
 			}
 		},
 		{
