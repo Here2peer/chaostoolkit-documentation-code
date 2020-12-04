@@ -44,7 +44,7 @@
 				"module": "chaosk8s.service.actions",
 				"func": "create_service_endpoint",
 				"arguments": {
-					"spec_path": "/db-service.yaml"
+					"spec_path": "db-service.yaml"
 				}
 			}
 		},
