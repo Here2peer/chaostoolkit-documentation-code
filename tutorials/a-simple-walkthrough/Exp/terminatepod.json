@@ -1,7 +1,7 @@
 {
 	"version": "0.0.1",
-	"title": "What is the impact of killing a pod?",
-	"description": "If the pod is killed, we should spin up a new pod.",
+	"title": "What is the impact of terminating a pod?",
+	"description": "If the pod is terminated, we should spin up a new pod.",
 	"tags": ["kubernetes"],
 
 	"secrets": {
