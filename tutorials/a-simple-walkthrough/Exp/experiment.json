@@ -61,7 +61,6 @@
                 "func": "terminate_pods",
                 "arguments": {
                     "label_selector": "app=load-book-api",
-                    "name_pattern": "book-[0-9]$",
                     "rand": true,
 					"qty": 1,
 					"order": "alphabetic",
