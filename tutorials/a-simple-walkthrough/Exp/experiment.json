@@ -20,7 +20,7 @@
 		}
 	},
 	"steady-state-hypothesis": {
-        "title": "Verifying services are healthy",
+        "title": "Verifying services are healthy and pod accepts api request",
         "probes": [
             {
                 "name": "all-our-microservices-should-be-healthy",
@@ -36,7 +36,6 @@
                 }
             }
         ],
-		"title": "Verifying pod accepts api requests",
         "probes": [
 			{
 			"type": "action",
@@ -60,9 +59,10 @@
                 "module": "chaosk8s.pod.actions",
                 "func": "terminate_pods",
                 "arguments": {
-                    "label_selector": "app=load-book-api",
+                    "label_selector": "app=app.kubernetes.io/name: load-book-api",
                     "rand": false,
 					"qty": 1,
+					"mode": fixed,
 					"order": "alphabetic",
 					"all": false
                 }
