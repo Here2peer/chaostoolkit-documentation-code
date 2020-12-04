@@ -29,7 +29,7 @@
 			"provider": {
 				"type": "python",
 				"module": "chaosk8s.probes",
-				"func": "deployment_available_and_healthy",
+				"func": "microservice_available_and_healthy",
 				"arguments": {
 					"name": "bookapi"
 				}
