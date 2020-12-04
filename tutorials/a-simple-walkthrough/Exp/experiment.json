@@ -64,14 +64,15 @@
 			}
 		},
 		{
-			"name": "deployment-fully-available",
 			"type": "probe",
+			"name": "deployment-fully-available",
 			"provider": {
 				"type": "python",
 				"module": "chaosk8s.deployment.probes",
 				"func": "deployment_fully_available",
 				"arguments": {
-					"name": "book"
+					"name": "book",
+					"timeout": 30
 				}
 			}
 		},
