@@ -60,8 +60,8 @@
                 "module": "chaosk8s.pod.actions",
                 "func": "terminate_pods",
                 "arguments": {
-                    "label_selector": "app=book",
-                    "rand": true,
+                    "label_selector": "app=load-book-api",
+                    "rand": false,
 					"qty": 1,
 					"order": "alphabetic",
 					"all": false
