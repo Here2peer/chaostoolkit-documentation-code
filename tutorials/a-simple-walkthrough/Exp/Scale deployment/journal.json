@@ -1,0 +1,261 @@
+{
+  "chaoslib-version": "1.15.1",
+  "platform": "Linux-4.19.128-microsoft-standard-x86_64-with-glibc2.29",
+  "node": "DESKTOP-72KKKO4",
+  "experiment": {
+    "version": "0.0.1",
+    "title": "What is the impact of scaling a deployment?",
+    "description": "Deployment scaling should happen without errors.",
+    "tags": [
+      "kubernetes"
+    ],
+    "secrets": {
+      "k8s": {
+        "kubernetes": {
+          "KUBERNETES_HOST": "192.168.1.3:80",
+          "KUBERNETES_CERT_FILE": {
+            "type": "env",
+            "key": "kubecert"
+          },
+          "KUBERNETES_KEY_FILE": {
+            "type": "env",
+            "key": "kubekey"
+          }
+        }
+      }
+    },
+    "steady-state-hypothesis": {
+      "title": "Verifying deployment is available and healthy",
+      "probes": [
+        {
+          "name": "Deployment-available-and-healthy",
+          "type": "probe",
+          "tolerance": true,
+          "secrets": [
+            "k8s"
+          ],
+          "provider": {
+            "type": "python",
+            "module": "chaosk8s.probes",
+            "func": "deployment_available_and_healthy",
+            "arguments": {
+              "name": "book",
+              "label_selector": "app.kubernetes.io/name=load-book-api"
+            }
+          }
+        }
+      ]
+    },
+    "method": [
+      {
+        "type": "action",
+        "name": "scale-deployment",
+        "provider": {
+          "type": "python",
+          "module": "chaosk8s.deployment.actions",
+          "func": "scale_deployment",
+          "arguments": {
+            "name": "book",
+            "ns": "default",
+            "replicas": 10
+          }
+        }
+      },
+      {
+        "type": "probe",
+        "name": "deployment-fully-available",
+        "provider": {
+          "type": "python",
+          "module": "chaosk8s.deployment.probes",
+          "func": "deployment_fully_available",
+          "arguments": {
+            "name": "book",
+            "timeout": 30
+          }
+        }
+      },
+      {
+        "type": "probe",
+        "name": "count-pods",
+        "provider": {
+          "type": "python",
+          "module": "chaosk8s.pod.probes",
+          "func": "count_pods",
+          "arguments": {
+            "label_selector": "app.kubernetes.io/name=load-book-api"
+          }
+        }
+      }
+    ],
+    "rollbacks": [
+      {
+        "type": "action",
+        "name": "scale-deployment",
+        "provider": {
+          "type": "python",
+          "module": "chaosk8s.deployment.actions",
+          "func": "scale_deployment",
+          "arguments": {
+            "name": "book",
+            "ns": "default",
+            "replicas": 1
+          }
+        }
+      }
+    ],
+    "dry": false
+  },
+  "start": "2020-12-04T14:32:34.532119",
+  "status": "completed",
+  "deviated": false,
+  "steady_states": {
+    "before": {
+      "steady_state_met": true,
+      "probes": [
+        {
+          "activity": {
+            "name": "Deployment-available-and-healthy",
+            "type": "probe",
+            "tolerance": true,
+            "secrets": [
+              "k8s"
+            ],
+            "provider": {
+              "type": "python",
+              "module": "chaosk8s.probes",
+              "func": "deployment_available_and_healthy",
+              "arguments": {
+                "name": "book",
+                "label_selector": "app.kubernetes.io/name=load-book-api"
+              }
+            }
+          },
+          "output": true,
+          "status": "succeeded",
+          "start": "2020-12-04T14:32:34.533077",
+          "end": "2020-12-04T14:32:34.547743",
+          "duration": 0.014666,
+          "tolerance_met": true
+        }
+      ]
+    },
+    "after": {
+      "steady_state_met": true,
+      "probes": [
+        {
+          "activity": {
+            "name": "Deployment-available-and-healthy",
+            "type": "probe",
+            "tolerance": true,
+            "secrets": [
+              "k8s"
+            ],
+            "provider": {
+              "type": "python",
+              "module": "chaosk8s.probes",
+              "func": "deployment_available_and_healthy",
+              "arguments": {
+                "name": "book",
+                "label_selector": "app.kubernetes.io/name=load-book-api"
+              }
+            }
+          },
+          "output": true,
+          "status": "succeeded",
+          "start": "2020-12-04T14:32:40.675312",
+          "end": "2020-12-04T14:32:40.773015",
+          "duration": 0.097703,
+          "tolerance_met": true
+        }
+      ]
+    },
+    "during": []
+  },
+  "run": [
+    {
+      "activity": {
+        "type": "action",
+        "name": "scale-deployment",
+        "provider": {
+          "type": "python",
+          "module": "chaosk8s.deployment.actions",
+          "func": "scale_deployment",
+          "arguments": {
+            "name": "book",
+            "ns": "default",
+            "replicas": 10
+          }
+        }
+      },
+      "output": null,
+      "status": "succeeded",
+      "start": "2020-12-04T14:32:34.548305",
+      "end": "2020-12-04T14:32:34.570070",
+      "duration": 0.021765
+    },
+    {
+      "activity": {
+        "type": "probe",
+        "name": "deployment-fully-available",
+        "provider": {
+          "type": "python",
+          "module": "chaosk8s.deployment.probes",
+          "func": "deployment_fully_available",
+          "arguments": {
+            "name": "book",
+            "timeout": 30
+          }
+        }
+      },
+      "output": true,
+      "status": "succeeded",
+      "start": "2020-12-04T14:32:34.570425",
+      "end": "2020-12-04T14:32:40.463703",
+      "duration": 5.893278
+    },
+    {
+      "activity": {
+        "type": "probe",
+        "name": "count-pods",
+        "provider": {
+          "type": "python",
+          "module": "chaosk8s.pod.probes",
+          "func": "count_pods",
+          "arguments": {
+            "label_selector": "app.kubernetes.io/name=load-book-api"
+          }
+        }
+      },
+      "output": 10,
+      "status": "succeeded",
+      "start": "2020-12-04T14:32:40.464352",
+      "end": "2020-12-04T14:32:40.668712",
+      "duration": 0.20436
+    }
+  ],
+  "rollbacks": [
+    {
+      "activity": {
+        "type": "action",
+        "name": "scale-deployment",
+        "provider": {
+          "type": "python",
+          "module": "chaosk8s.deployment.actions",
+          "func": "scale_deployment",
+          "arguments": {
+            "name": "book",
+            "ns": "default",
+            "replicas": 1
+          }
+        }
+      },
+      "output": null,
+      "status": "succeeded",
+      "start": "2020-12-04T14:32:40.785198",
+      "end": "2020-12-04T14:32:40.936859",
+      "duration": 0.151661
+    }
+  ],
+  "end": "2020-12-04T14:32:40.937084",
+  "duration": 6.414323091506958
+}
