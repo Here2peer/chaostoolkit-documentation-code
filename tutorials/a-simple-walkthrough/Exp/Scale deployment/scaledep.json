@@ -37,7 +37,8 @@
 			}
 		}]
 	},
-	"method": [{
+	"method": [
+		{
 			"type": "action",
 			"name": "scale-deployment",
 			"provider": {
@@ -80,5 +81,21 @@
 			}
 		}
 
-	]
+	],
+	"rollbacks": [
+	{
+		"type": "action",
+		"name": "scale-deployment",
+		"provider": {
+			"type": "python",
+			"module": "chaosk8s.deployment.actions",
+			"func": "scale_deployment",
+			"arguments": {
+				"name": "book",
+				"ns": "default",
+				"replicas": 1
+			}
+		}
+	}]
+	
 }
