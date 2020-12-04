@@ -53,7 +53,7 @@
 				"module": "chaosk8s.pod.actions",
 				"func": "delete_pods",
 				"arguments": {
-					"label_selector": "load-book-api"
+					"name": "book"
 				}
 			},
             "pauses": {
