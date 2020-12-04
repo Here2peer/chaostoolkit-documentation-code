@@ -20,24 +20,20 @@
 		}
 	},
 	"steady-state-hypothesis": {
-        "title": "Verifying services are healthy and pod accepts api request",
-        "probes": [
-            {
-                "name": "all-our-microservices-should-be-healthy",
-                "type": "probe",
-                "tolerance": true,
-                "secrets": ["k8s"],
-                "provider": {
-                    "type": "python",
-                    "module": "chaosk8s.probes",
-                    "func": "all_pods_healthy",
-                    "arguments": {
-                    }
-                }
-            }
-        ],
-        "probes": [
-			{
+		"title": "Verifying services are healthy and pod accepts api request",
+		"probes": [{
+			"name": "all-our-microservices-should-be-healthy",
+			"type": "probe",
+			"tolerance": true,
+			"secrets": ["k8s"],
+			"provider": {
+				"type": "python",
+				"module": "chaosk8s.probes",
+				"func": "all_pods_healthy",
+				"arguments": {}
+			}
+		}],
+		"probes": [{
 			"type": "action",
 			"name": "we-can-request-list-of-books",
 			"tolerance": 200,
@@ -46,30 +42,28 @@
 				"timeout": 3,
 				"verify_tls": false,
 				"url": "http://192.168.1.3:30571/all"
-				}
 			}
-		]
-    },
-	"method": [
-		{
-            "type": "action",
-            "name": "terminate-api-pod",
-            "provider": {
-                "type": "python",
-                "module": "chaosk8s.pod.actions",
-                "func": "terminate_pods",
-                "arguments": {
-                    "label_selector": "app=app.kubernetes.io/name: load-book-api",
-                    "rand": false,
+		}]
+	},
+	"method": [{
+			"type": "action",
+			"name": "terminate-api-pod",
+			"provider": {
+				"type": "python",
+				"module": "chaosk8s.pod.actions",
+				"func": "terminate_pods",
+				"arguments": {
+					"label_selector": "app=app.kubernetes.io/name: load-book-api",
+					"rand": false,
 					"qty": 1,
-					"mode": fixed,
+					"mode": "fixed",
 					"order": "alphabetic",
 					"all": false
-                }
-            },
-            "pauses": {
-                "after": 5
-            }
+				}
+			},
+			"pauses": {
+				"after": 5
+			}
 		},
 		{
 			"type": "action",
