@@ -1,0 +1,84 @@
+{
+	"version": "0.0.1",
+	"title": "What is the impact of scaling a deployment?",
+	"description": "Deployment scaling should happen without errors.",
+	"tags": ["kubernetes"],
+
+	"secrets": {
+		"k8s": {
+			"kubernetes": {
+				"KUBERNETES_HOST": "192.168.1.3:80",
+				"KUBERNETES_CERT_FILE": {
+					"type": "env",
+					"key": "kubecert"
+				},
+				"KUBERNETES_KEY_FILE": {
+					"type": "env",
+					"key": "kubekey"
+				}
+			}
+		}
+	},
+	"steady-state-hypothesis": {
+		"title": "Verifying deployment is available and healthy",
+		"probes": [{
+			"name": "Deployment-available-and-healthy",
+			"type": "probe",
+			"tolerance": true,
+			"secrets": ["k8s"],
+			"provider": {
+				"type": "python",
+				"module": "chaosk8s.probes",
+				"func": "deployment_available_and_healthy",
+				"arguments": {
+					"name": "book",
+					"label_selector": "app.kubernetes.io/name=load-book-api"
+				}
+			}
+		}]
+	},
+	"method": [{
+			"type": "action",
+			"name": "scale-deployment",
+			"provider": {
+				"type": "python",
+				"module": "chaosk8s.deployment.actions",
+				"func": "scale_deployment",
+				"arguments": {
+					"name": "book",
+					"ns": "default",
+					"replicas": 10
+				}
+			},
+			"pauses": {
+				"after": 10
+			}
+		},
+		{
+			"type": "probe",
+			"name": "deployment-fully-available",
+			"provider": {
+				"type": "python",
+				"module": "chaosk8s.deployment.probes",
+				"func": "deployment_fully_available",
+				"arguments": {
+				  "name": "book",
+				  "timeout": 30
+				}
+			}
+		},		
+		{
+			"type": "probe",
+			"name": "count-pods",
+			"provider": {
+				"type": "python",
+				"module": "chaosk8s.pod.probes",
+				"func": "count_pods",
+				"arguments": {
+					"label_selector": "app.kubernetes.io/name=load-book-api"
+				}
+			}
+		}
+
+	]
+}
