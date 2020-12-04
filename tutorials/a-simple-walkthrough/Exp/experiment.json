@@ -20,7 +20,7 @@
 		}
 	},
 	"steady-state-hypothesis": {
-        "title": "Verifying service remains healthy",
+        "title": "Verifying services are healthy",
         "probes": [
             {
                 "name": "all-our-microservices-should-be-healthy",
@@ -35,17 +35,50 @@
                     }
                 }
             }
-        ]
+        ],
+		"title": "Verifying pod accepts api requests",
+        "probes": [
+			{
+			"type": "action",
+			"name": "we-can-request-list-of-books",
+			"tolerance": 200,
+			"provider": {
+				"type": "http",
+				"timeout": 3,
+				"verify_tls": false,
+				"url": "http://192.168.1.3:30571/all"
+				}
+			}
+		]
     },
-	"method": [{
-		"type": "action",
-		"name": "we-can-request-list-of-books",
-		"tolerance": 200,
-		"provider": {
-			"type": "http",
-			"timeout": 3,
-			"verify_tls": false,
-			"url": "http://192.168.1.3:30571/all"
+	"method": [
+		{
+            "type": "action",
+            "name": "terminate-api-pod",
+            "provider": {
+                "type": "python",
+                "module": "chaosk8s.pod.actions",
+                "func": "terminate_pods",
+                "arguments": {
+                    "label_selector": "app=book",
+                    "name_pattern": "book-[0-9]$",
+                    "rand": true
+                }
+            },
+            "pauses": {
+                "after": 5
+            }
+		},
+		{
+			"type": "action",
+			"name": "we-can-request-list-of-books",
+			"tolerance": 200,
+			"provider": {
+				"type": "http",
+				"timeout": 3,
+				"verify_tls": false,
+				"url": "http://192.168.1.3:30571/all"
+			}
 		}
-	}]
+	]
 }
