@@ -53,7 +53,7 @@
 				"module": "chaosk8s.pod.actions",
 				"func": "terminate_pods",
 				"arguments": {
-					"label_selector": "app=app.kubernetes.io/name: load-book-api",
+					"label_selector": "load-book-api",
 					"rand": false,
 					"qty": 1,
 					"mode": "fixed",
