@@ -53,7 +53,8 @@
 				"module": "chaosk8s.pod.actions",
 				"func": "terminate_pods",
 				"arguments": {
-					"label_selector": "book",
+					"label_selector": "",
+					"name_pattern": "book",
 					"rand": false,
 					"qty": 1,
 					"mode": "fixed",
