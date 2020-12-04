@@ -31,7 +31,7 @@
 				"module": "chaosk8s.deployment.probes",
 				"func": "deployment_available_and_healthy",
 				"arguments": {
-					"name": "postgres"
+					"name": ""
 				}
 			}
 		}]
