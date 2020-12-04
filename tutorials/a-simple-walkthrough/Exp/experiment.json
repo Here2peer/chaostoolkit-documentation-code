@@ -29,9 +29,9 @@
 			"provider": {
 				"type": "python",
 				"module": "chaosk8s.probes",
-				"func": "microservice_available_and_healthy",
+				"func": "deployment_available_and_healthy",
 				"arguments": {
-					"name": "bookapi"
+					"name": "postgres"
 				}
 			}
 		}]
