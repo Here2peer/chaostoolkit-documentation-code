@@ -59,7 +59,8 @@
 					"qty": 1,
 					"mode": "fixed",
 					"order": "alphabetic",
-					"all": false
+					"all": false,
+					"ns": "default"
 				}
 			},
             "pauses": {

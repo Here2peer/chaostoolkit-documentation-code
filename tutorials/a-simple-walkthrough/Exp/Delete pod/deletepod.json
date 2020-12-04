@@ -45,15 +45,18 @@
 			}
 		}]
 	},
-	"method": [{
+	"method": [
+		{
 			"type": "action",
-			"name": "terminate-api-pod",
+			"name": "delete-api-pod",
 			"provider": {
 				"type": "python",
 				"module": "chaosk8s.pod.actions",
 				"func": "delete_pods",
 				"arguments": {
-					"name": "book"
+					"name": "book",
+					"label_selector": "load-book-api",
+					"ns": "default"
 				}
 			},
             "pauses": {
