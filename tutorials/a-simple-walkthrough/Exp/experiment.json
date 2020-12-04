@@ -30,7 +30,7 @@
                 "provider": {
                     "type": "python",
                     "module": "chaosk8s.probes",
-                    "func": "all_microservices_healthy",
+                    "func": "all_pods_healthy",
                     "arguments": {
                     }
                 }
