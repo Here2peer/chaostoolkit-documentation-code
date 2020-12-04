@@ -61,7 +61,10 @@
 					"order": "alphabetic",
 					"all": false
 				}
-			}
+			},
+            "pauses": {
+                "after": 5
+            }
 		},
 		{
 			"type": "probe",
