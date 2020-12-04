@@ -7,7 +7,7 @@
 	"secrets": {
 		"k8s": {
 			"kubernetes": {
-				"KUBERNETES_HOST": "http://192.168.1.3:80",
+				"KUBERNETES_HOST": "192.168.1.3:80",
 				"KUBERNETES_CERT_FILE": {
 					"type": "env",
 					"key": "kubecert"
@@ -30,7 +30,7 @@
                 "provider": {
                     "type": "python",
                     "module": "chaosk8s.probes",
-                    "func": "microservice_available_and_healthy",
+                    "func": "deployment_available_and_healthy",
                     "arguments": {
                         "name": "postgres"
                     }
