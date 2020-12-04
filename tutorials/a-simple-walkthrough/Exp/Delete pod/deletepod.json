@@ -55,7 +55,7 @@
 				"func": "delete_pods",
 				"arguments": {
 					"name": "book",
-					"label_selector": "app.kubernetes.io'/'name=load-book-api",
+					"label_selector": "app.kubernetes.io/name=load-book-api",
 					"ns": "default"
 				}
 			},
