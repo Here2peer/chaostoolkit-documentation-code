@@ -30,9 +30,8 @@
                 "provider": {
                     "type": "python",
                     "module": "chaosk8s.probes",
-                    "func": "deployment_available_and_healthy",
+                    "func": "all_microservices_healthy",
                     "arguments": {
-                        "name": ""
                     }
                 }
             }
