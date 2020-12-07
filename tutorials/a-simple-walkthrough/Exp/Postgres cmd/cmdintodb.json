@@ -131,8 +131,8 @@
 				"module": "chaosk8s.pod.actions",
 				"func": "exec_in_pods",
 				"arguments": {
-				  "cmd": "psql bookshelf admin",
-				  "name": "app=postgres"
+					"cmd": "psql bookshelf admin",
+					"label_selector": "app=postgres"
 				}
 			}
 		},
@@ -144,8 +144,8 @@
 				"module": "chaosk8s.pod.actions",
 				"func": "exec_in_pods",
 				"arguments": {
-				  "cmd": "CREATE SCHEMA IF NOT EXISTS shelf2 AUTHORIZATION admin;",
-				  "name": "app=postgres"
+					"cmd": "CREATE SCHEMA IF NOT EXISTS shelf2 AUTHORIZATION admin;",
+					"label_selector": "app=postgres"
 				}
 			}
 		},
@@ -157,8 +157,8 @@
 				"module": "chaosk8s.pod.actions",
 				"func": "exec_in_pods",
 				"arguments": {
-				  "cmd": "CREATE TABLE shelf2.book (id bigint PRIMARY KEY, title text, publisher text);",
-				  "name": "app=postgres"
+					"cmd": "CREATE TABLE shelf2.book (id bigint PRIMARY KEY, title text, publisher text);",
+					"label_selector": "app=postgres"
 				}
 			}
 		},
