@@ -23,7 +23,7 @@
 		"title": "Scale back all pods.",
 		"probes": [{
 			"type": "action",
-			"tolerance": true,
+			"tolerance": "",
 			"name": "scale-deployment",
 			"provider": {
 				"type": "python",
@@ -39,7 +39,7 @@
 		{
 			"type": "action",
 			"name": "scale-deployment",
-			"tolerance": true,
+			"tolerance": "",
 			"provider": {
 				"type": "python",
 				"module": "chaosk8s.deployment.actions",
@@ -53,7 +53,7 @@
 		},
 		{
 			"type": "action",
-			"tolerance": true,
+			"tolerance": "",
 			"name": "delete-api-pod",
 			"provider": {
 				"type": "python",
@@ -68,7 +68,7 @@
 		},
 		{
 			"type": "action",
-			"tolerance": true,
+			"tolerance": "",
 			"name": "delete-api-pod",
 			"provider": {
 				"type": "python",
