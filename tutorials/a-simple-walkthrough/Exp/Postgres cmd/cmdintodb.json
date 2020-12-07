@@ -22,8 +22,21 @@
 	"steady-state-hypothesis": {
 		"title": "Scale back all pods.",
 		"probes": [{
+			"type": "probe",
+			"name": "deployment-fully-available",
+			"provider": {
+				"type": "python",
+				"module": "chaosk8s.deployment.probes",
+				"func": "deployment_fully_available",
+				"arguments": {
+				  "name": "postgres"
+				}
+		  }
+		}]
+	},
+	"method": [
+		{
 			"type": "action",
-			"tolerance": "",
 			"name": "scale-deployment",
 			"provider": {
 				"type": "python",
@@ -39,7 +52,6 @@
 		{
 			"type": "action",
 			"name": "scale-deployment",
-			"tolerance": "",
 			"provider": {
 				"type": "python",
 				"module": "chaosk8s.deployment.actions",
@@ -53,7 +65,6 @@
 		},
 		{
 			"type": "action",
-			"tolerance": "",
 			"name": "delete-api-pod",
 			"provider": {
 				"type": "python",
@@ -68,7 +79,6 @@
 		},
 		{
 			"type": "action",
-			"tolerance": "",
 			"name": "delete-api-pod",
 			"provider": {
 				"type": "python",
@@ -82,12 +92,11 @@
 		    "pauses": {
                 "after": 10
             }
-		}]
-	},
-	"method": [{
-		"type": "action",
-		"name": "scale-deployment",
-		"provider": {
+		},
+		{
+			"type": "action",
+			"name": "scale-deployment",
+			"provider": {
 				"type": "python",
 				"module": "chaosk8s.deployment.actions",
 				"func": "scale_deployment",
@@ -111,9 +120,9 @@
 			}
 		},
 		{
-		"type": "action",
-		"name": "exec-in-pods",
-		"provider": {
+			"type": "action",
+			"name": "exec-in-pods",
+			"provider": {
 				"type": "python",
 				"module": "chaosk8s.pod.actions",
 				"func": "exec_in_pods",
@@ -124,9 +133,9 @@
 			}
 		},
 		{
-		"type": "action",
-		"name": "exec-in-pods",
-		"provider": {
+			"type": "action",
+			"name": "exec-in-pods",
+			"provider": {
 				"type": "python",
 				"module": "chaosk8s.pod.actions",
 				"func": "exec_in_pods",
@@ -137,9 +146,9 @@
 			}
 		},
 		{
-		"type": "action",
-		"name": "exec-in-pods",
-		"provider": {
+			"type": "action",
+			"name": "exec-in-pods",
+			"provider": {
 				"type": "python",
 				"module": "chaosk8s.pod.actions",
 				"func": "exec_in_pods",
@@ -150,9 +159,9 @@
 			}
 		},
 		{
-		"type": "action",
-		"name": "exec-in-pods",
-		"provider": {
+			"type": "action",
+			"name": "exec-in-pods",
+			"provider": {
 				"type": "python",
 				"module": "chaosk8s.pod.actions",
 				"func": "exec_in_pods",
@@ -163,9 +172,9 @@
 			}
 		},
 		{
-		"type": "action",
-		"name": "scale-deployment",
-		"provider": {
+			"type": "action",
+			"name": "scale-deployment",
+			"provider": {
 				"type": "python",
 				"module": "chaosk8s.deployment.actions",
 				"func": "scale_deployment",
