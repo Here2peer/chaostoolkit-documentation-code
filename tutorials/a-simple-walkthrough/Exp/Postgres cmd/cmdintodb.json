@@ -1,0 +1,188 @@
+{
+	"version": "0.0.1",
+	"title": "What is the impact of terminating a pod?",
+	"description": "If the pod is terminated, we should spin up a new pod.",
+	"tags": ["kubernetes"],
+
+	"secrets": {
+		"k8s": {
+			"kubernetes": {
+				"KUBERNETES_HOST": "192.168.1.3:80",
+				"KUBERNETES_CERT_FILE": {
+					"type": "env",
+					"key": "kubecert"
+				},
+				"KUBERNETES_KEY_FILE": {
+					"type": "env",
+					"key": "kubekey"
+				}
+			}
+		}
+	},
+	"steady-state-hypothesis": {
+		"title": "Scale back all pods.",
+		"probes": [{
+			"type": "action",
+			"name": "scale-deployment",
+			"provider": {
+				"type": "python",
+				"module": "chaosk8s.deployment.actions",
+				"func": "scale_deployment",
+				"arguments": {
+					"name": "book",
+					"ns": "default",
+					"replicas": 0
+				}
+			}
+		},
+		{
+			"type": "action",
+			"name": "scale-deployment",
+			"provider": {
+				"type": "python",
+				"module": "chaosk8s.deployment.actions",
+				"func": "scale_deployment",
+				"arguments": {
+					"name": "postgres",
+					"ns": "default",
+					"replicas": 0
+				}
+			}
+		},
+		{
+			"type": "action",
+				"name": "delete-api-pod",
+				"provider": {
+					"type": "python",
+					"module": "chaosk8s.pod.actions",
+					"func": "delete_pods",
+					"arguments": {
+						"name": "book",
+						"label_selector": "app.kubernetes.io/name=load-book-api",
+						"ns": "default"
+					}
+				}
+		},
+		{
+			"type": "action",
+			"name": "delete-api-pod",
+			"provider": {
+				"type": "python",
+				"module": "chaosk8s.pod.actions",
+				"func": "delete_pods",
+				"arguments": {
+					"name": "postgres",
+					"ns": "default"
+				}
+			},
+		    "pauses": {
+                "after": 10
+            }
+		}]
+	},
+	"method": [{
+		"type": "action",
+		"name": "scale-deployment",
+		"provider": {
+				"type": "python",
+				"module": "chaosk8s.deployment.actions",
+				"func": "scale_deployment",
+				"arguments": {
+					"name": "postgres",
+					"ns": "default",
+					"replicas": 0
+				}
+			}
+		},
+		{
+			"type": "probe",
+			"name": "deployment-is-fully-available",
+			"provider": {
+				"type": "python",
+				"module": "chaosk8s.probes",
+				"func": "deployment_is_fully_available",
+				"arguments": {
+				  "name": "postgres"
+				}
+			}
+		},
+		{
+		"type": "action",
+		"name": "exec-in-pods",
+		"provider": {
+				"type": "python",
+				"module": "chaosk8s.pod.actions",
+				"func": "exec_in_pods",
+				"arguments": {
+				  "cmd": "createdb -U admin bookshelf",
+				  "name": "app=postgres"
+				}
+			}
+		},
+		{
+		"type": "action",
+		"name": "exec-in-pods",
+		"provider": {
+				"type": "python",
+				"module": "chaosk8s.pod.actions",
+				"func": "exec_in_pods",
+				"arguments": {
+				  "cmd": "psql bookshelf admin",
+				  "name": "app=postgres"
+				}
+			}
+		},
+		{
+		"type": "action",
+		"name": "exec-in-pods",
+		"provider": {
+				"type": "python",
+				"module": "chaosk8s.pod.actions",
+				"func": "exec_in_pods",
+				"arguments": {
+				  "cmd": "CREATE SCHEMA IF NOT EXISTS shelf2 AUTHORIZATION admin;",
+				  "name": "app=postgres"
+				}
+			}
+		},
+		{
+		"type": "action",
+		"name": "exec-in-pods",
+		"provider": {
+				"type": "python",
+				"module": "chaosk8s.pod.actions",
+				"func": "exec_in_pods",
+				"arguments": {
+				  "cmd": "CREATE TABLE shelf2.book (id bigint PRIMARY KEY, title text, publisher text);",
+				  "name": "app=postgres"
+				}
+			}
+		},
+		{
+		"type": "action",
+		"name": "scale-deployment",
+		"provider": {
+				"type": "python",
+				"module": "chaosk8s.deployment.actions",
+				"func": "scale_deployment",
+				"arguments": {
+					"name": "book",
+					"ns": "default",
+					"replicas": 0
+				}
+			}
+		},
+		{
+			"name": "all-our-microservices-should-be-healthy",
+			"type": "probe",
+			"tolerance": true,
+			"secrets": ["k8s"],
+			"provider": {
+				"type": "python",
+				"module": "chaosk8s.probes",
+				"func": "all_pods_healthy",
+				"arguments": {}
+			}
+		}
+]}
+
