@@ -1,7 +1,7 @@
 {
 	"version": "0.0.1",
-	"title": "What is the impact of terminating a pod?",
-	"description": "If the pod is terminated, we should spin up a new pod.",
+	"title": "What is the impact of restarting a db and recreating tables",
+	"description": "All services should be scaled down and restarted",
 	"tags": ["kubernetes"],
 
 	"secrets": {
