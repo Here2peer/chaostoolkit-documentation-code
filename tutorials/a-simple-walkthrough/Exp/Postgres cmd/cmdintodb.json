@@ -39,6 +39,7 @@
 		{
 			"type": "action",
 			"name": "scale-deployment",
+			"tolerance": true,
 			"provider": {
 				"type": "python",
 				"module": "chaosk8s.deployment.actions",
@@ -52,20 +53,22 @@
 		},
 		{
 			"type": "action",
-				"name": "delete-api-pod",
-				"provider": {
-					"type": "python",
-					"module": "chaosk8s.pod.actions",
-					"func": "delete_pods",
-					"arguments": {
-						"name": "book",
-						"label_selector": "app.kubernetes.io/name=load-book-api",
-						"ns": "default"
-					}
+			"tolerance": true,
+			"name": "delete-api-pod",
+			"provider": {
+				"type": "python",
+				"module": "chaosk8s.pod.actions",
+				"func": "delete_pods",
+				"arguments": {
+					"name": "book",
+					"label_selector": "app.kubernetes.io/name=load-book-api",
+					"ns": "default"
 				}
+			}
 		},
 		{
 			"type": "action",
+			"tolerance": true,
 			"name": "delete-api-pod",
 			"provider": {
 				"type": "python",
