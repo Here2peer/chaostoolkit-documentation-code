@@ -207,7 +207,9 @@
 				"type": "python",
 				"module": "chaosk8s.probes",
 				"func": "deployment_is_fully_available",
-				"arguments": {}
+				"arguments": {
+					"name": "postgres"
+				}
 			}
 		}
 ]}
