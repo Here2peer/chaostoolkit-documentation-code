@@ -131,7 +131,10 @@
 					"cmd": "createdb -U admin bookshelf",
 					"label_selector": "app=postgres"
 				}
-			}
+			},
+		    "pauses": {
+                "after": 2
+            }
 		},
 		{
 			"type": "action",
@@ -144,7 +147,10 @@
 					"cmd": "psql bookshelf admin",
 					"label_selector": "app=postgres"
 				}
-			}
+			},
+		    "pauses": {
+                "after": 2
+            }
 		},
 		{
 			"type": "action",
@@ -157,7 +163,10 @@
 					"cmd": "CREATE SCHEMA IF NOT EXISTS shelf2 AUTHORIZATION admin;",
 					"label_selector": "app=postgres"
 				}
-			}
+			},
+		    "pauses": {
+                "after": 2
+            }
 		},
 		{
 			"type": "action",
@@ -170,7 +179,10 @@
 					"cmd": "CREATE TABLE shelf2.book (id bigint PRIMARY KEY, title text, publisher text);",
 					"label_selector": "app=postgres"
 				}
-			}
+			},
+		    "pauses": {
+                "after": 2
+            }
 		},
 		{
 			"type": "action",
@@ -187,14 +199,14 @@
 			}
 		},
 		{
-			"name": "all-our-microservices-should-be-healthy",
+			"name": "deployment-is-fully-available",
 			"type": "probe",
 			"tolerance": true,
 			"secrets": ["k8s"],
 			"provider": {
 				"type": "python",
 				"module": "chaosk8s.probes",
-				"func": "all_pods_healthy",
+				"func": "deployment_is_fully_available",
 				"arguments": {}
 			}
 		}
