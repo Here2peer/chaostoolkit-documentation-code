@@ -140,7 +140,7 @@
 				"module": "chaosk8s.pod.actions",
 				"func": "exec_in_pods",
 				"arguments": {
-					"cmd": "psql -f script.sql bookshelf -U admin",
+					"cmd": "ls",
 					"label_selector": "app=postgres",
 					"ns": "default",
 					"container_name": "postgres"
