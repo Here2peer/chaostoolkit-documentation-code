@@ -116,31 +116,13 @@
 		},
 		{
 			"type": "action",
-			"name": "create-database-script",
+			"name": "fill-database-bookshelf",
 			"provider": {
 				"type": "python",
 				"module": "chaosk8s.pod.actions",
 				"func": "exec_in_pods",
 				"arguments": {
-					"cmd": "echo 'CREATE SCHEMA IF NOT EXISTS shelf2 AUTHORIZATION admin;' >> script.sql && echo 'CREATE TABLE shelf2.book (id bigint PRIMARY KEY, title text, publisher text);' >> script.sql",
-					"label_selector": "app=postgres",
-					"ns": "default",
-					"container_name": "postgres"
-				}
-			},
-		    "pauses": {
-                "after": 2
-            }
-		},
-		{
-			"type": "action",
-			"name": "run-database-script",
-			"provider": {
-				"type": "python",
-				"module": "chaosk8s.pod.actions",
-				"func": "exec_in_pods",
-				"arguments": {
-					"cmd": "ls",
+					"cmd": "echo 'CREATE SCHEMA IF NOT EXISTS shelf2 AUTHORIZATION admin;' >> script.sql && echo 'CREATE TABLE shelf2.book (id bigint PRIMARY KEY, title text, publisher text);' >> script.sql && psql -f script.sql bookshelf -U admin && ls",
 					"label_selector": "app=postgres",
 					"ns": "default",
 					"container_name": "postgres"
