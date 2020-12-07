@@ -62,7 +62,10 @@
 					"ns": "default",
 					"replicas": 0
 				}
-			}
+			},
+		    "pauses": {
+                "after": 10
+            }
 		},
 		{
 			"type": "action",
@@ -202,14 +205,14 @@
 			}
 		},
 		{
-			"name": "deployment-is-fully-available",
+			"name": "deployment-fully-available",
 			"type": "probe",
 			"tolerance": true,
 			"secrets": ["k8s"],
 			"provider": {
 				"type": "python",
 				"module": "chaosk8s.probes",
-				"func": "deployment_is_fully_available",
+				"func": "deployment_fully_available",
 				"arguments": {
 					"name": "postgres"
 				}
