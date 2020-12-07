@@ -23,6 +23,7 @@
 		"title": "Scale back all pods.",
 		"probes": [{
 			"type": "action",
+			"tolerance": true,
 			"name": "scale-deployment",
 			"provider": {
 				"type": "python",
