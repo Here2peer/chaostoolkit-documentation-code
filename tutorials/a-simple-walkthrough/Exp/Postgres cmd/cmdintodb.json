@@ -110,11 +110,11 @@
 		},
 		{
 			"type": "probe",
-			"name": "deployment_fully_available",
+			"name": "deployment-not-fully-available",
 			"provider": {
 				"type": "python",
 				"module": "chaosk8s.probes",
-				"func": "deployment_fully_available",
+				"func": "deployment_not_fully_available",
 				"arguments": {
 				  "name": "postgres"
 				}
