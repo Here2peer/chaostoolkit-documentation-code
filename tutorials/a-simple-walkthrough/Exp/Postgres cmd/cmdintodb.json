@@ -134,7 +134,7 @@
 				"module": "chaosk8s.pod.actions",
 				"func": "exec_in_pods",
 				"arguments": {
-					"cmd": "createdb -U admin bookshelf && psql -f script.sql -U admin",
+					"cmd": "createdb -U admin bookshelf && echo "CREATE SCHEMA IF NOT EXISTS shelf2 AUTHORIZATION admin;" >> script.sql && echo "CREATE TABLE shelf2.book (id bigint PRIMARY KEY, title text, publisher text);" >> script.sql && psql -f script.sql bookshelf -U admin",
 					"label_selector": "app=postgres"
 				}
 			},
