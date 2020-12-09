@@ -41,7 +41,7 @@
 				"type": "http",
 				"timeout": 3,
 				"verify_tls": false,
-				"url": "http://192.168.1.3:30571/all"
+				"url": "http://192.168.1.12:30571/all"
 			}
 		}]
 	},
@@ -71,7 +71,7 @@
 				"type": "http",
 				"timeout": 3,
 				"verify_tls": false,
-				"url": "http://192.168.1.3:30571/all"
+				"url": "http://192.168.1.12:30571/all"
 			}
 		}
 	]
