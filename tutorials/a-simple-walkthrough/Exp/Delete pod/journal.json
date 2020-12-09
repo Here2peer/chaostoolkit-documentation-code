@@ -1,0 +1,206 @@
+{
+  "chaoslib-version": "1.15.1",
+  "platform": "Linux-4.19.128-microsoft-standard-x86_64-with-glibc2.29",
+  "node": "DESKTOP-72KKKO4",
+  "experiment": {
+    "version": "0.0.1",
+    "title": "What is the impact of deleting a pod without a grace period?",
+    "description": "If the pod is terminated, we should spin up a new pod.",
+    "tags": [
+      "kubernetes"
+    ],
+    "secrets": {
+      "k8s": {
+        "kubernetes": {
+          "KUBERNETES_HOST": "192.168.1.3:80",
+          "KUBERNETES_CERT_FILE": {
+            "type": "env",
+            "key": "kubecert"
+          },
+          "KUBERNETES_KEY_FILE": {
+            "type": "env",
+            "key": "kubekey"
+          }
+        }
+      }
+    },
+    "steady-state-hypothesis": {
+      "title": "Verifying services are healthy and pod accepts api request",
+      "probes": [
+        {
+          "type": "action",
+          "name": "we-can-request-list-of-books",
+          "tolerance": 200,
+          "provider": {
+            "type": "http",
+            "timeout": 3,
+            "verify_tls": false,
+            "url": "http://192.168.1.12:30571/all"
+          }
+        }
+      ]
+    },
+    "method": [
+      {
+        "type": "action",
+        "name": "delete-api-pod",
+        "provider": {
+          "type": "python",
+          "module": "chaosk8s.pod.actions",
+          "func": "delete_pods",
+          "arguments": {
+            "name": "book",
+            "label_selector": "app.kubernetes.io/name=load-book-api",
+            "ns": "default"
+          }
+        },
+        "pauses": {
+          "after": 10
+        }
+      },
+      {
+        "type": "action",
+        "name": "we-can-request-list-of-books",
+        "tolerance": 200,
+        "provider": {
+          "type": "http",
+          "timeout": 3,
+          "verify_tls": false,
+          "url": "http://192.168.1.12:30571/all"
+        }
+      }
+    ],
+    "dry": false
+  },
+  "start": "2020-12-09T13:55:03.800420",
+  "status": "completed",
+  "deviated": false,
+  "steady_states": {
+    "before": {
+      "steady_state_met": true,
+      "probes": [
+        {
+          "activity": {
+            "type": "action",
+            "name": "we-can-request-list-of-books",
+            "tolerance": 200,
+            "provider": {
+              "type": "http",
+              "timeout": 3,
+              "verify_tls": false,
+              "url": "http://192.168.1.12:30571/all"
+            }
+          },
+          "output": {
+            "status": 200,
+            "headers": {
+              "Content-Type": "application/json",
+              "Transfer-Encoding": "chunked",
+              "Date": "Wed, 09 Dec 2020 13:55:03 GMT",
+              "Keep-Alive": "timeout=60",
+              "Connection": "keep-alive"
+            },
+            "body": []
+          },
+          "status": "succeeded",
+          "start": "2020-12-09T13:55:03.800760",
+          "end": "2020-12-09T13:55:03.806899",
+          "duration": 0.006139,
+          "tolerance_met": true
+        }
+      ]
+    },
+    "after": {
+      "steady_state_met": true,
+      "probes": [
+        {
+          "activity": {
+            "type": "action",
+            "name": "we-can-request-list-of-books",
+            "tolerance": 200,
+            "provider": {
+              "type": "http",
+              "timeout": 3,
+              "verify_tls": false,
+              "url": "http://192.168.1.12:30571/all"
+            }
+          },
+          "output": {
+            "status": 200,
+            "headers": {
+              "Content-Type": "application/json",
+              "Transfer-Encoding": "chunked",
+              "Date": "Wed, 09 Dec 2020 13:55:13 GMT",
+              "Keep-Alive": "timeout=60",
+              "Connection": "keep-alive"
+            },
+            "body": []
+          },
+          "status": "succeeded",
+          "start": "2020-12-09T13:55:13.980612",
+          "end": "2020-12-09T13:55:13.987397",
+          "duration": 0.006785,
+          "tolerance_met": true
+        }
+      ]
+    },
+    "during": []
+  },
+  "run": [
+    {
+      "activity": {
+        "type": "action",
+        "name": "delete-api-pod",
+        "provider": {
+          "type": "python",
+          "module": "chaosk8s.pod.actions",
+          "func": "delete_pods",
+          "arguments": {
+            "name": "book",
+            "label_selector": "app.kubernetes.io/name=load-book-api",
+            "ns": "default"
+          }
+        },
+        "pauses": {
+          "after": 10
+        }
+      },
+      "output": null,
+      "status": "succeeded",
+      "start": "2020-12-09T13:55:03.807230",
+      "end": "2020-12-09T13:55:03.820277",
+      "duration": 0.013047
+    },
+    {
+      "activity": {
+        "type": "action",
+        "name": "we-can-request-list-of-books",
+        "tolerance": 200,
+        "provider": {
+          "type": "http",
+          "timeout": 3,
+          "verify_tls": false,
+          "url": "http://192.168.1.12:30571/all"
+        }
+      },
+      "output": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json",
+          "Transfer-Encoding": "chunked",
+          "Date": "Wed, 09 Dec 2020 13:55:13 GMT",
+          "Keep-Alive": "timeout=60",
+          "Connection": "keep-alive"
+        },
+        "body": []
+      },
+      "status": "succeeded",
+      "start": "2020-12-09T13:55:13.829762",
+      "end": "2020-12-09T13:55:13.980272",
+      "duration": 0.15051
+    }
+  ],
+  "rollbacks": [],
+  "end": "2020-12-09T13:55:13.987827",
+  "duration": 10.19205355644226
+}
