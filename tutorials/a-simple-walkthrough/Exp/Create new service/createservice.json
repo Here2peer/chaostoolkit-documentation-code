@@ -58,9 +58,6 @@
 				"arguments": {
 					"label_selector": "app=test"
 				}
-			},
-			"pauses": {
-				"after": 10
 			}
 		}
 	],
