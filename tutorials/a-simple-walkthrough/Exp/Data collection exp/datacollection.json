@@ -6,20 +6,34 @@
 	"steady-state-hypothesis": {
 		"title": "Verifying services are healthy and pod accepts api request",
 		"probes": [{
+			{
+				"name": "count-pods",
+				"type": "probe",
+				"tolerance": 14,
+				"provider": {
+					"module": "chaosk8s.pod.probes",
+					"func": "count_pods",
+					"type": "python",
+					"arguments": {
+						"label_selector": "app=spring-config-client",
+						"ns": "cmst-test"
+					}
+				}
+			}
+		}]
+	},
+	"method": [
+		{
 			"name": "all-our-microservices-should-be-healthy",
 			"type": "probe",
 			"secrets": ["k8s"],
-			"tolerance": false,
 			"provider": {
 				"type": "python",
 				"module": "chaosk8s.probes",
 				"func": "all_pods_healthy",
 				"arguments": {
 					"ns": "cmst-test"}
-			}
-		}]
-	},
-	"method": [
+			},
 		{
 			"name": "count-pods",
 			"type": "probe",
@@ -28,7 +42,7 @@
 				"func": "count_pods",
 				"type": "python",
 				"arguments": {
-					"label_selector": "app=springboot-api-openshift-cmst-test",
+					"label_selector": "app=spring-config-client",
 					"ns": "cmst-test"
 				}
 			}
@@ -41,7 +55,7 @@
 				"type": "python",
 				"module": "chaosk8s.pod.probes",
 				"arguments": {
-					"name": "app=springboot-api-openshift-cmst-test",
+					"name": "app=spring-config-client",
 					"ns": "cmst-test"
 				}
 			}
@@ -54,7 +68,7 @@
 				"func": "pods_in_conditions",
 				"type": "python",
 				"arguments": {
-					"label_selector": "app=springboot-api-openshift-cmst-test",
+					"label_selector": "app=spring-config-client",
 					"conditions": [],
 					"ns": "cmst-test"
 				}
@@ -68,7 +82,7 @@
 				"type": "python",
 				"module": "chaosk8s.pod.probes",
 				"arguments": {
-					"label_selector": "",
+					"label_selector": "app=spring-config-client",
 					"ns": "cmst-test"
 				}
 			}
@@ -81,7 +95,7 @@
 				"type": "python",
 				"module": "chaosk8s.pod.probes",
 				"arguments": {
-					"label_selector": "",
+					"label_selector": "app=spring-config-client",
 					"ns": "cmst-test"
 				}
 			}
@@ -118,7 +132,7 @@
 				"type": "python",
 				"module": "chaosk8s.statefulset.probes",
 				"arguments": {
-					"name": "app=springboot-api-openshift-cmst-test",
+					"name": "app=spring-config-client",
 					"ns": "cmst-test"
 				}
 			}
@@ -143,7 +157,7 @@
 				"type": "python",
 				"module": "chaosk8s.deployment.actions",
 				"arguments": {
-					"name": "app=springboot-api-openshift-cmst-test",
+					"name": "app=spring-config-client",
 					"ns": "cmst-test"
 				}
 			}
@@ -156,7 +170,7 @@
 				"type": "python",
 				"module": "chaosk8s.deployment.probes",
 				"arguments": {
-					"name": "app=springboot-api-openshift-cmst-test"
+					"name": "app=spring-config-client"
 				}
 			}
 		},
@@ -169,7 +183,7 @@
 				"module": "chaosk8s.deployment.actions",
 				"arguments": {
 					"replicas": 0,
-					"name": "app=springboot-api-openshift-cmst-test",
+					"name": "app=spring-config-client",
 					"ns": "cmst-test"
 				}
 			}
@@ -182,7 +196,7 @@
 				"type": "python",
 				"module": "chaosk8s.actions",
 				"arguments": {
-					"name": "app=springboot-api-openshift-cmst-test",
+					"name": "app=spring-config-client",
 					"ns": "cmst-test"
 				}
 			}
@@ -196,7 +210,7 @@
 				"module": "chaosk8s.actions",
 				"arguments": {
 					"replicas": 0,
-					"name": "app=springboot-api-openshift-cmst-test",
+					"name": "app=spring-config-client",
 					"ns": "cmst-test"
 				}
 			}
@@ -209,7 +223,7 @@
 				"type": "python",
 				"module": "chaosk8s.probes",
 				"arguments": {
-					"name": "app=springboot-api-openshift-cmst-test"
+					"name": "spring-config-client"
 				}
 			}
 		},

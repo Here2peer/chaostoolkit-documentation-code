@@ -1,0 +1,768 @@
+{
+  "chaoslib-version": "1.16.0",
+  "platform": "Linux-4.18.0-193.29.1.el8_2.x86_64-x86_64-with-redhat-8.3-Ootpa",
+  "node": "chaos-toolkit-test-79cdb9fc78-z9dht",
+  "experiment": {
+    "version": "0.0.1",
+    "title": "What is the impact of deleting a pod without a grace period?",
+    "description": "If the pod is terminated, we should spin up a new pod.",
+    "tags": [
+      "kubernetes"
+    ],
+    "steady-state-hypothesis": {
+      "title": "Verifying services are healthy and pod accepts api request",
+      "probes": [
+        {
+          "name": "count-pods",
+          "type": "probe",
+          "tolerance": 14,
+          "provider": {
+            "module": "chaosk8s.pod.probes",
+            "func": "count_pods",
+            "type": "python",
+            "arguments": {
+              "label_selector": "app=spring-config-client",
+              "ns": "cmst-test"
+            }
+          }
+        }
+      ]
+    },
+    "method": [
+      {
+        "name": "count-pods",
+        "type": "probe",
+        "provider": {
+          "module": "chaosk8s.pod.probes",
+          "func": "count_pods",
+          "type": "python",
+          "arguments": {
+            "label_selector": "app=spring-config-client",
+            "ns": "cmst-test"
+          }
+        }
+      },
+      {
+        "name": "pod-is-not-available",
+        "type": "probe",
+        "provider": {
+          "func": "pod_is_not_available",
+          "type": "python",
+          "module": "chaosk8s.pod.probes",
+          "arguments": {
+            "name": "app=spring-config-client",
+            "ns": "cmst-test"
+          }
+        }
+      },
+      {
+        "name": "pods-in-conditions",
+        "type": "probe",
+        "provider": {
+          "module": "chaosk8s.pod.probes",
+          "func": "pods_in_conditions",
+          "type": "python",
+          "arguments": {
+            "label_selector": "app=spring-config-client",
+            "conditions": [
+              "Running",
+              "Pending"
+            ],
+            "ns": "cmst-test"
+          }
+        }
+      },
+      {
+        "name": "pods-not-in-phase",
+        "type": "probe",
+        "provider": {
+          "func": "pods_not_in_phase",
+          "type": "python",
+          "module": "chaosk8s.pod.probes",
+          "arguments": {
+            "label_selector": "app=spring-config-client",
+            "ns": "cmst-test"
+          }
+        }
+      },
+      {
+        "name": "read-pod-logs",
+        "type": "probe",
+        "provider": {
+          "module": "chaosk8s.pod.probes",
+          "func": "read_pod_logs",
+          "type": "python",
+          "arguments": {
+            "ns": "cmst-test"
+          }
+        }
+      },
+      {
+        "name": "terminate-pods",
+        "type": "action",
+        "provider": {
+          "module": "chaosk8s.pod.actions",
+          "func": "terminate_pods",
+          "type": "python",
+          "arguments": {
+            "ns": "cmst-test"
+          }
+        }
+      },
+      {
+        "name": "statefulset-fully-available",
+        "type": "probe",
+        "provider": {
+          "func": "statefulset_fully_available",
+          "type": "python",
+          "module": "chaosk8s.statefulset.probes",
+          "arguments": {
+            "name": "app=spring-config-client",
+            "ns": "cmst-test"
+          }
+        }
+      },
+      {
+        "name": "service-is-initialized",
+        "type": "probe",
+        "provider": {
+          "module": "chaosk8s.service.probes",
+          "func": "service_is_initialized",
+          "type": "python",
+          "arguments": {
+            "ns": "cmst-test"
+          }
+        }
+      },
+      {
+        "name": "delete-deployment",
+        "type": "action",
+        "provider": {
+          "func": "delete_deployment",
+          "type": "python",
+          "module": "chaosk8s.deployment.actions",
+          "arguments": {
+            "name": "app=spring-config-client",
+            "ns": "cmst-test"
+          }
+        }
+      },
+      {
+        "name": "deployment-available-and-healthy",
+        "type": "probe",
+        "provider": {
+          "func": "deployment_available_and_healthy",
+          "type": "python",
+          "module": "chaosk8s.deployment.probes",
+          "arguments": {
+            "name": "app=spring-config-client"
+          }
+        }
+      },
+      {
+        "name": "scale-deployment",
+        "type": "action",
+        "provider": {
+          "func": "scale_deployment",
+          "type": "python",
+          "module": "chaosk8s.deployment.actions",
+          "arguments": {
+            "replicas": 0,
+            "name": "app=spring-config-client",
+            "ns": "cmst-test"
+          }
+        }
+      },
+      {
+        "name": "remove-service-endpoint",
+        "type": "action",
+        "provider": {
+          "func": "remove_service_endpoint",
+          "type": "python",
+          "module": "chaosk8s.actions",
+          "arguments": {
+            "name": "app=spring-config-client",
+            "ns": "cmst-test"
+          }
+        }
+      },
+      {
+        "name": "scale-microservice",
+        "type": "action",
+        "provider": {
+          "func": "scale_microservice",
+          "type": "python",
+          "module": "chaosk8s.actions",
+          "arguments": {
+            "replicas": 0,
+            "name": "app=spring-config-client",
+            "ns": "cmst-test"
+          }
+        }
+      },
+      {
+        "name": "microservice-available-and-healthy",
+        "type": "probe",
+        "provider": {
+          "func": "microservice_available_and_healthy",
+          "type": "python",
+          "module": "chaosk8s.probes",
+          "arguments": {
+            "name": "spring-config-client"
+          }
+        }
+      },
+      {
+        "name": "read-microservices-logs",
+        "type": "probe",
+        "provider": {
+          "module": "chaosk8s.probes",
+          "func": "read_microservices_logs",
+          "type": "python"
+        }
+      }
+    ],
+    "dry": false
+  },
+  "start": "2021-02-25T14:15:41.431268",
+  "status": "completed",
+  "deviated": false,
+  "steady_states": {
+    "before": {
+      "steady_state_met": true,
+      "probes": [
+        {
+          "activity": {
+            "name": "count-pods",
+            "type": "probe",
+            "tolerance": 14,
+            "provider": {
+              "module": "chaosk8s.pod.probes",
+              "func": "count_pods",
+              "type": "python",
+              "arguments": {
+                "label_selector": "app=spring-config-client",
+                "ns": "cmst-test"
+              }
+            }
+          },
+          "output": 14,
+          "status": "succeeded",
+          "start": "2021-02-25T14:15:41.431740",
+          "end": "2021-02-25T14:15:41.494196",
+          "duration": 0.062456,
+          "tolerance_met": true
+        }
+      ]
+    },
+    "after": {
+      "steady_state_met": true,
+      "probes": [
+        {
+          "activity": {
+            "name": "count-pods",
+            "type": "probe",
+            "tolerance": 14,
+            "provider": {
+              "module": "chaosk8s.pod.probes",
+              "func": "count_pods",
+              "type": "python",
+              "arguments": {
+                "label_selector": "app=spring-config-client",
+                "ns": "cmst-test"
+              }
+            }
+          },
+          "output": 14,
+          "status": "succeeded",
+          "start": "2021-02-25T14:15:42.193898",
+          "end": "2021-02-25T14:15:42.262289",
+          "duration": 0.068391,
+          "tolerance_met": true
+        }
+      ]
+    },
+    "during": []
+  },
+  "run": [
+    {
+      "activity": {
+        "name": "count-pods",
+        "type": "probe",
+        "provider": {
+          "module": "chaosk8s.pod.probes",
+          "func": "count_pods",
+          "type": "python",
+          "arguments": {
+            "label_selector": "app=spring-config-client",
+            "ns": "cmst-test"
+          }
+        }
+      },
+      "output": 14,
+      "status": "succeeded",
+      "start": "2021-02-25T14:15:41.494698",
+      "end": "2021-02-25T14:15:41.565444",
+      "duration": 0.070746
+    },
+    {
+      "activity": {
+        "name": "pod-is-not-available",
+        "type": "probe",
+        "provider": {
+          "func": "pod_is_not_available",
+          "type": "python",
+          "module": "chaosk8s.pod.probes",
+          "arguments": {
+            "name": "app=spring-config-client",
+            "ns": "cmst-test"
+          }
+        }
+      },
+      "output": null,
+      "status": "failed",
+      "exception": [
+        "Traceback (most recent call last):\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/chaoslib/provider/python.py\", line 55, in run_python_activity\n    return func(**arguments)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/chaosk8s/pod/probes.py\", line 238, in pod_is_not_available\n    ret = v1.list_namespaced_pod(ns, label_selector=label_selector)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api/core_v1_api.py\", line 15302, in list_namespaced_pod\n    return self.list_namespaced_pod_with_http_info(namespace, **kwargs)  # noqa: E501\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api/core_v1_api.py\", line 15427, in list_namespaced_pod_with_http_info\n    collection_formats=collection_formats)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 353, in call_api\n    _preload_content, _request_timeout, _host)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 184, in __call_api\n    _request_timeout=_request_timeout)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 377, in request\n    headers=headers)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/rest.py\", line 243, in GET\n    query_params=query_params)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/rest.py\", line 233, in request\n    raise ApiException(http_resp=r)\n",
+        "kubernetes.client.exceptions.ApiException: (400)\nReason: Bad Request\nHTTP response headers: HTTPHeaderDict({'Audit-Id': 'bc24545d-339b-4d4e-ac64-e6cae2e94381', 'Cache-Control': 'no-cache, private', 'Content-Type': 'application/json', 'X-Kubernetes-Pf-Flowschema-Uid': '12514990-4cc8-4d9b-9d51-f0ba95b70a4d', 'X-Kubernetes-Pf-Prioritylevel-Uid': 'd492cebf-0100-4286-9409-b05e9f326f7e', 'Date': 'Thu, 25 Feb 2021 14:15:41 GMT', 'Content-Length': '175'})\nHTTP response body: {\"kind\":\"Status\",\"apiVersion\":\"v1\",\"metadata\":{},\"status\":\"Failure\",\"message\":\"unable to parse requirement: found '=', expected: ',' or ')'\",\"reason\":\"BadRequest\",\"code\":400}\n\n\n",
+        "\nDuring handling of the above exception, another exception occurred:\n\n",
+        "chaoslib.exceptions.ActivityFailed: kubernetes.client.exceptions.ApiException: (400)\nReason: Bad Request\nHTTP response headers: HTTPHeaderDict({'Audit-Id': 'bc24545d-339b-4d4e-ac64-e6cae2e94381', 'Cache-Control': 'no-cache, private', 'Content-Type': 'application/json', 'X-Kubernetes-Pf-Flowschema-Uid': '12514990-4cc8-4d9b-9d51-f0ba95b70a4d', 'X-Kubernetes-Pf-Prioritylevel-Uid': 'd492cebf-0100-4286-9409-b05e9f326f7e', 'Date': 'Thu, 25 Feb 2021 14:15:41 GMT', 'Content-Length': '175'})\nHTTP response body: {\"kind\":\"Status\",\"apiVersion\":\"v1\",\"metadata\":{},\"status\":\"Failure\",\"message\":\"unable to parse requirement: found '=', expected: ',' or ')'\",\"reason\":\"BadRequest\",\"code\":400}\n"
+      ],
+      "start": "2021-02-25T14:15:41.565710",
+      "end": "2021-02-25T14:15:41.581945",
+      "duration": 0.016235
+    },
+    {
+      "activity": {
+        "name": "pods-in-conditions",
+        "type": "probe",
+        "provider": {
+          "module": "chaosk8s.pod.probes",
+          "func": "pods_in_conditions",
+          "type": "python",
+          "arguments": {
+            "label_selector": "app=spring-config-client",
+            "conditions": [
+              "Running",
+              "Pending"
+            ],
+            "ns": "cmst-test"
+          }
+        }
+      },
+      "output": null,
+      "status": "failed",
+      "exception": [
+        "Traceback (most recent call last):\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/chaoslib/provider/python.py\", line 55, in run_python_activity\n    return func(**arguments)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/chaosk8s/pod/probes.py\", line 152, in pods_in_conditions\n    condition=condition\n",
+        "chaoslib.exceptions.ActivityFailed: pod cpqq-testinpipeline-spring-config-client-6fd9fb56fc-t6m4k does not match the following given condition: Running\n",
+        "\nDuring handling of the above exception, another exception occurred:\n\n",
+        "chaoslib.exceptions.ActivityFailed: chaoslib.exceptions.ActivityFailed: pod cpqq-testinpipeline-spring-config-client-6fd9fb56fc-t6m4k does not match the following given condition: Running\n"
+      ],
+      "start": "2021-02-25T14:15:41.582224",
+      "end": "2021-02-25T14:15:41.718388",
+      "duration": 0.136164
+    },
+    {
+      "activity": {
+        "name": "pods-not-in-phase",
+        "type": "probe",
+        "provider": {
+          "func": "pods_not_in_phase",
+          "type": "python",
+          "module": "chaosk8s.pod.probes",
+          "arguments": {
+            "label_selector": "app=spring-config-client",
+            "ns": "cmst-test"
+          }
+        }
+      },
+      "output": null,
+      "status": "failed",
+      "exception": [
+        "Traceback (most recent call last):\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/chaoslib/provider/python.py\", line 55, in run_python_activity\n    return func(**arguments)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/chaosk8s/pod/probes.py\", line 186, in pods_not_in_phase\n    name=label_selector, s=d.status.phase))\n",
+        "chaoslib.exceptions.ActivityFailed: pod 'app=spring-config-client' should not be in phase 'Running'\n",
+        "\nDuring handling of the above exception, another exception occurred:\n\n",
+        "chaoslib.exceptions.ActivityFailed: chaoslib.exceptions.ActivityFailed: pod 'app=spring-config-client' should not be in phase 'Running'\n"
+      ],
+      "start": "2021-02-25T14:15:41.718591",
+      "end": "2021-02-25T14:15:41.778299",
+      "duration": 0.059708
+    },
+    {
+      "activity": {
+        "name": "read-pod-logs",
+        "type": "probe",
+        "provider": {
+          "module": "chaosk8s.pod.probes",
+          "func": "read_pod_logs",
+          "type": "python",
+          "arguments": {
+            "ns": "cmst-test"
+          }
+        }
+      },
+      "output": {},
+      "status": "succeeded",
+      "start": "2021-02-25T14:15:41.778501",
+      "end": "2021-02-25T14:15:41.795298",
+      "duration": 0.016797
+    },
+    {
+      "activity": {
+        "name": "terminate-pods",
+        "type": "action",
+        "provider": {
+          "module": "chaosk8s.pod.actions",
+          "func": "terminate_pods",
+          "type": "python",
+          "arguments": {
+            "ns": "cmst-test"
+          }
+        }
+      },
+      "output": null,
+      "status": "failed",
+      "exception": [
+        "Traceback (most recent call last):\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/chaoslib/provider/python.py\", line 55, in run_python_activity\n    return func(**arguments)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/chaosk8s/pod/actions.py\", line 68, in terminate_pods\n    v1.delete_namespaced_pod(p.metadata.name, ns, body=body)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api/core_v1_api.py\", line 12141, in delete_namespaced_pod\n    return self.delete_namespaced_pod_with_http_info(name, namespace, **kwargs)  # noqa: E501\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api/core_v1_api.py\", line 12262, in delete_namespaced_pod_with_http_info\n    collection_formats=collection_formats)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 353, in call_api\n    _preload_content, _request_timeout, _host)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 184, in __call_api\n    _request_timeout=_request_timeout)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 420, in request\n    body=body)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/rest.py\", line 270, in DELETE\n    body=body)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/rest.py\", line 233, in request\n    raise ApiException(http_resp=r)\n",
+        "kubernetes.client.exceptions.ApiException: (403)\nReason: Forbidden\nHTTP response headers: HTTPHeaderDict({'Audit-Id': '0915689a-8171-4761-8338-9c79476a6deb', 'Cache-Control': 'no-cache, private', 'Content-Type': 'application/json', 'X-Content-Type-Options': 'nosniff', 'X-Kubernetes-Pf-Flowschema-Uid': '12514990-4cc8-4d9b-9d51-f0ba95b70a4d', 'X-Kubernetes-Pf-Prioritylevel-Uid': 'd492cebf-0100-4286-9409-b05e9f326f7e', 'Date': 'Thu, 25 Feb 2021 14:15:41 GMT', 'Content-Length': '379'})\nHTTP response body: {\"kind\":\"Status\",\"apiVersion\":\"v1\",\"metadata\":{},\"status\":\"Failure\",\"message\":\"pods \\\"chaos-toolkit-getlogs-779f4ffccd-ptgfk\\\" is forbidden: User \\\"system:serviceaccount:cmst-test:default\\\" cannot delete resource \\\"pods\\\" in API group \\\"\\\" in the namespace \\\"cmst-test\\\"\",\"reason\":\"Forbidden\",\"details\":{\"name\":\"chaos-toolkit-getlogs-779f4ffccd-ptgfk\",\"kind\":\"pods\"},\"code\":403}\n\n\n",
+        "\nDuring handling of the above exception, another exception occurred:\n\n",
+        "chaoslib.exceptions.ActivityFailed: kubernetes.client.exceptions.ApiException: (403)\nReason: Forbidden\nHTTP response headers: HTTPHeaderDict({'Audit-Id': '0915689a-8171-4761-8338-9c79476a6deb', 'Cache-Control': 'no-cache, private', 'Content-Type': 'application/json', 'X-Content-Type-Options': 'nosniff', 'X-Kubernetes-Pf-Flowschema-Uid': '12514990-4cc8-4d9b-9d51-f0ba95b70a4d', 'X-Kubernetes-Pf-Prioritylevel-Uid': 'd492cebf-0100-4286-9409-b05e9f326f7e', 'Date': 'Thu, 25 Feb 2021 14:15:41 GMT', 'Content-Length': '379'})\nHTTP response body: {\"kind\":\"Status\",\"apiVersion\":\"v1\",\"metadata\":{},\"status\":\"Failure\",\"message\":\"pods \\\"chaos-toolkit-getlogs-779f4ffccd-ptgfk\\\" is forbidden: User \\\"system:serviceaccount:cmst-test:default\\\" cannot delete resource \\\"pods\\\" in API group \\\"\\\" in the namespace \\\"cmst-test\\\"\",\"reason\":\"Forbidden\",\"details\":{\"name\":\"chaos-toolkit-getlogs-779f4ffccd-ptgfk\",\"kind\":\"pods\"},\"code\":403}\n"
+      ],
+      "start": "2021-02-25T14:15:41.795793",
+      "end": "2021-02-25T14:15:41.884797",
+      "duration": 0.089004
+    },
+    {
+      "activity": {
+        "name": "statefulset-fully-available",
+        "type": "probe",
+        "provider": {
+          "func": "statefulset_fully_available",
+          "type": "python",
+          "module": "chaosk8s.statefulset.probes",
+          "arguments": {
+            "name": "app=spring-config-client",
+            "ns": "cmst-test"
+          }
+        }
+      },
+      "output": null,
+      "status": "failed",
+      "exception": [
+        "Traceback (most recent call last):\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/chaoslib/provider/python.py\", line 55, in run_python_activity\n    return func(**arguments)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/chaosk8s/statefulset/probes.py\", line 117, in statefulset_fully_available\n    secrets,\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/chaosk8s/statefulset/probes.py\", line 51, in _statefulset_readiness_has_state\n    for event in watch_events():\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/watch/watch.py\", line 157, in stream\n    resp = func(*args, **kwargs)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api/apps_v1_api.py\", line 3587, in list_namespaced_stateful_set\n    return self.list_namespaced_stateful_set_with_http_info(namespace, **kwargs)  # noqa: E501\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api/apps_v1_api.py\", line 3712, in list_namespaced_stateful_set_with_http_info\n    collection_formats=collection_formats)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 353, in call_api\n    _preload_content, _request_timeout, _host)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 184, in __call_api\n    _request_timeout=_request_timeout)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 377, in request\n    headers=headers)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/rest.py\", line 243, in GET\n    query_params=query_params)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/rest.py\", line 233, in request\n    raise ApiException(http_resp=r)\n",
+        "kubernetes.client.exceptions.ApiException: (403)\nReason: Forbidden\nHTTP response headers: HTTPHeaderDict({'Audit-Id': 'ce9a7b35-bf5d-49b0-ada0-debd448e500c', 'Cache-Control': 'no-cache, private', 'Content-Type': 'application/json', 'X-Content-Type-Options': 'nosniff', 'Date': 'Thu, 25 Feb 2021 14:15:41 GMT', 'Content-Length': '335'})\nHTTP response body: b'{\"kind\":\"Status\",\"apiVersion\":\"v1\",\"metadata\":{},\"status\":\"Failure\",\"message\":\"statefulsets.apps is forbidden: User \\\\\"system:serviceaccount:cmst-test:default\\\\\" cannot watch resource \\\\\"statefulsets\\\\\" in API group \\\\\"apps\\\\\" in the namespace \\\\\"cmst-test\\\\\"\",\"reason\":\"Forbidden\",\"details\":{\"group\":\"apps\",\"kind\":\"statefulsets\"},\"code\":403}\\n'\n\n",
+        "\nDuring handling of the above exception, another exception occurred:\n\n",
+        "chaoslib.exceptions.ActivityFailed: kubernetes.client.exceptions.ApiException: (403)\nReason: Forbidden\nHTTP response headers: HTTPHeaderDict({'Audit-Id': 'ce9a7b35-bf5d-49b0-ada0-debd448e500c', 'Cache-Control': 'no-cache, private', 'Content-Type': 'application/json', 'X-Content-Type-Options': 'nosniff', 'Date': 'Thu, 25 Feb 2021 14:15:41 GMT', 'Content-Length': '335'})\nHTTP response body: b'{\"kind\":\"Status\",\"apiVersion\":\"v1\",\"metadata\":{},\"status\":\"Failure\",\"message\":\"statefulsets.apps is forbidden: User \\\\\"system:serviceaccount:cmst-test:default\\\\\" cannot watch resource \\\\\"statefulsets\\\\\" in API group \\\\\"apps\\\\\" in the namespace \\\\\"cmst-test\\\\\"\",\"reason\":\"Forbidden\",\"details\":{\"group\":\"apps\",\"kind\":\"statefulsets\"},\"code\":403}\\n'\n"
+      ],
+      "start": "2021-02-25T14:15:41.885018",
+      "end": "2021-02-25T14:15:41.897302",
+      "duration": 0.012284
+    },
+    {
+      "activity": {
+        "name": "service-is-initialized",
+        "type": "probe",
+        "provider": {
+          "module": "chaosk8s.service.probes",
+          "func": "service_is_initialized",
+          "type": "python",
+          "arguments": {
+            "ns": "cmst-test"
+          }
+        }
+      },
+      "output": true,
+      "status": "succeeded",
+      "start": "2021-02-25T14:15:41.897491",
+      "end": "2021-02-25T14:15:42.035661",
+      "duration": 0.13817
+    },
+    {
+      "activity": {
+        "name": "delete-deployment",
+        "type": "action",
+        "provider": {
+          "func": "delete_deployment",
+          "type": "python",
+          "module": "chaosk8s.deployment.actions",
+          "arguments": {
+            "name": "app=spring-config-client",
+            "ns": "cmst-test"
+          }
+        }
+      },
+      "output": null,
+      "status": "failed",
+      "exception": [
+        "Traceback (most recent call last):\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/chaoslib/provider/python.py\", line 55, in run_python_activity\n    return func(**arguments)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/chaosk8s/deployment/actions.py\", line 54, in delete_deployment\n    ret = v1.list_namespaced_deployment(ns, label_selector=label_selector)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api/apps_v1_api.py\", line 3269, in list_namespaced_deployment\n    return self.list_namespaced_deployment_with_http_info(namespace, **kwargs)  # noqa: E501\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api/apps_v1_api.py\", line 3394, in list_namespaced_deployment_with_http_info\n    collection_formats=collection_formats)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 353, in call_api\n    _preload_content, _request_timeout, _host)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 184, in __call_api\n    _request_timeout=_request_timeout)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 377, in request\n    headers=headers)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/rest.py\", line 243, in GET\n    query_params=query_params)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/rest.py\", line 233, in request\n    raise ApiException(http_resp=r)\n",
+        "kubernetes.client.exceptions.ApiException: (403)\nReason: Forbidden\nHTTP response headers: HTTPHeaderDict({'Audit-Id': 'a97acce3-a352-4287-90a8-7bcc86a4458d', 'Cache-Control': 'no-cache, private', 'Content-Type': 'application/json', 'X-Content-Type-Options': 'nosniff', 'X-Kubernetes-Pf-Flowschema-Uid': '12514990-4cc8-4d9b-9d51-f0ba95b70a4d', 'X-Kubernetes-Pf-Prioritylevel-Uid': 'd492cebf-0100-4286-9409-b05e9f326f7e', 'Date': 'Thu, 25 Feb 2021 14:15:42 GMT', 'Content-Length': '331'})\nHTTP response body: {\"kind\":\"Status\",\"apiVersion\":\"v1\",\"metadata\":{},\"status\":\"Failure\",\"message\":\"deployments.apps is forbidden: User \\\"system:serviceaccount:cmst-test:default\\\" cannot list resource \\\"deployments\\\" in API group \\\"apps\\\" in the namespace \\\"cmst-test\\\"\",\"reason\":\"Forbidden\",\"details\":{\"group\":\"apps\",\"kind\":\"deployments\"},\"code\":403}\n\n\n",
+        "\nDuring handling of the above exception, another exception occurred:\n\n",
+        "chaoslib.exceptions.ActivityFailed: kubernetes.client.exceptions.ApiException: (403)\nReason: Forbidden\nHTTP response headers: HTTPHeaderDict({'Audit-Id': 'a97acce3-a352-4287-90a8-7bcc86a4458d', 'Cache-Control': 'no-cache, private', 'Content-Type': 'application/json', 'X-Content-Type-Options': 'nosniff', 'X-Kubernetes-Pf-Flowschema-Uid': '12514990-4cc8-4d9b-9d51-f0ba95b70a4d', 'X-Kubernetes-Pf-Prioritylevel-Uid': 'd492cebf-0100-4286-9409-b05e9f326f7e', 'Date': 'Thu, 25 Feb 2021 14:15:42 GMT', 'Content-Length': '331'})\nHTTP response body: {\"kind\":\"Status\",\"apiVersion\":\"v1\",\"metadata\":{},\"status\":\"Failure\",\"message\":\"deployments.apps is forbidden: User \\\"system:serviceaccount:cmst-test:default\\\" cannot list resource \\\"deployments\\\" in API group \\\"apps\\\" in the namespace \\\"cmst-test\\\"\",\"reason\":\"Forbidden\",\"details\":{\"group\":\"apps\",\"kind\":\"deployments\"},\"code\":403}\n"
+      ],
+      "start": "2021-02-25T14:15:42.035909",
+      "end": "2021-02-25T14:15:42.060760",
+      "duration": 0.024851
+    },
+    {
+      "activity": {
+        "name": "deployment-available-and-healthy",
+        "type": "probe",
+        "provider": {
+          "func": "deployment_available_and_healthy",
+          "type": "python",
+          "module": "chaosk8s.deployment.probes",
+          "arguments": {
+            "name": "app=spring-config-client"
+          }
+        }
+      },
+      "output": null,
+      "status": "failed",
+      "exception": [
+        "Traceback (most recent call last):\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/chaoslib/provider/python.py\", line 55, in run_python_activity\n    return func(**arguments)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/chaosk8s/deployment/probes.py\", line 40, in deployment_available_and_healthy\n    ret = v1.list_namespaced_deployment(ns, field_selector=field_selector)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api/apps_v1_api.py\", line 3269, in list_namespaced_deployment\n    return self.list_namespaced_deployment_with_http_info(namespace, **kwargs)  # noqa: E501\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api/apps_v1_api.py\", line 3394, in list_namespaced_deployment_with_http_info\n    collection_formats=collection_formats)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 353, in call_api\n    _preload_content, _request_timeout, _host)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 184, in __call_api\n    _request_timeout=_request_timeout)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 377, in request\n    headers=headers)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/rest.py\", line 243, in GET\n    query_params=query_params)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/rest.py\", line 233, in request\n    raise ApiException(http_resp=r)\n",
+        "kubernetes.client.exceptions.ApiException: (403)\nReason: Forbidden\nHTTP response headers: HTTPHeaderDict({'Audit-Id': '4dba3c2e-de38-4760-9d77-cdf2851939bb', 'Cache-Control': 'no-cache, private', 'Content-Type': 'application/json', 'X-Content-Type-Options': 'nosniff', 'X-Kubernetes-Pf-Flowschema-Uid': '12514990-4cc8-4d9b-9d51-f0ba95b70a4d', 'X-Kubernetes-Pf-Prioritylevel-Uid': 'd492cebf-0100-4286-9409-b05e9f326f7e', 'Date': 'Thu, 25 Feb 2021 14:15:42 GMT', 'Content-Length': '329'})\nHTTP response body: {\"kind\":\"Status\",\"apiVersion\":\"v1\",\"metadata\":{},\"status\":\"Failure\",\"message\":\"deployments.apps is forbidden: User \\\"system:serviceaccount:cmst-test:default\\\" cannot list resource \\\"deployments\\\" in API group \\\"apps\\\" in the namespace \\\"default\\\"\",\"reason\":\"Forbidden\",\"details\":{\"group\":\"apps\",\"kind\":\"deployments\"},\"code\":403}\n\n\n",
+        "\nDuring handling of the above exception, another exception occurred:\n\n",
+        "chaoslib.exceptions.ActivityFailed: kubernetes.client.exceptions.ApiException: (403)\nReason: Forbidden\nHTTP response headers: HTTPHeaderDict({'Audit-Id': '4dba3c2e-de38-4760-9d77-cdf2851939bb', 'Cache-Control': 'no-cache, private', 'Content-Type': 'application/json', 'X-Content-Type-Options': 'nosniff', 'X-Kubernetes-Pf-Flowschema-Uid': '12514990-4cc8-4d9b-9d51-f0ba95b70a4d', 'X-Kubernetes-Pf-Prioritylevel-Uid': 'd492cebf-0100-4286-9409-b05e9f326f7e', 'Date': 'Thu, 25 Feb 2021 14:15:42 GMT', 'Content-Length': '329'})\nHTTP response body: {\"kind\":\"Status\",\"apiVersion\":\"v1\",\"metadata\":{},\"status\":\"Failure\",\"message\":\"deployments.apps is forbidden: User \\\"system:serviceaccount:cmst-test:default\\\" cannot list resource \\\"deployments\\\" in API group \\\"apps\\\" in the namespace \\\"default\\\"\",\"reason\":\"Forbidden\",\"details\":{\"group\":\"apps\",\"kind\":\"deployments\"},\"code\":403}\n"
+      ],
+      "start": "2021-02-25T14:15:42.060956",
+      "end": "2021-02-25T14:15:42.072594",
+      "duration": 0.011638
+    },
+    {
+      "activity": {
+        "name": "scale-deployment",
+        "type": "action",
+        "provider": {
+          "func": "scale_deployment",
+          "type": "python",
+          "module": "chaosk8s.deployment.actions",
+          "arguments": {
+            "replicas": 0,
+            "name": "app=spring-config-client",
+            "ns": "cmst-test"
+          }
+        }
+      },
+      "output": null,
+      "status": "failed",
+      "exception": [
+        "Traceback (most recent call last):\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/chaosk8s/deployment/actions.py\", line 76, in scale_deployment\n    v1.patch_namespaced_deployment(name=name, namespace=ns, body=body)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api/apps_v1_api.py\", line 4511, in patch_namespaced_deployment\n    return self.patch_namespaced_deployment_with_http_info(name, namespace, body, **kwargs)  # noqa: E501\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api/apps_v1_api.py\", line 4636, in patch_namespaced_deployment_with_http_info\n    collection_formats=collection_formats)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 353, in call_api\n    _preload_content, _request_timeout, _host)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 184, in __call_api\n    _request_timeout=_request_timeout)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 413, in request\n    body=body)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/rest.py\", line 300, in PATCH\n    body=body)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/rest.py\", line 233, in request\n    raise ApiException(http_resp=r)\n",
+        "kubernetes.client.exceptions.ApiException: (403)\nReason: Forbidden\nHTTP response headers: HTTPHeaderDict({'Audit-Id': '6e8f2bc1-0265-4e98-aec2-c28a7f2ff3e0', 'Cache-Control': 'no-cache, private', 'Content-Type': 'application/json', 'X-Content-Type-Options': 'nosniff', 'X-Kubernetes-Pf-Flowschema-Uid': '12514990-4cc8-4d9b-9d51-f0ba95b70a4d', 'X-Kubernetes-Pf-Prioritylevel-Uid': 'd492cebf-0100-4286-9409-b05e9f326f7e', 'Date': 'Thu, 25 Feb 2021 14:15:42 GMT', 'Content-Length': '395'})\nHTTP response body: {\"kind\":\"Status\",\"apiVersion\":\"v1\",\"metadata\":{},\"status\":\"Failure\",\"message\":\"deployments.apps \\\"app=spring-config-client\\\" is forbidden: User \\\"system:serviceaccount:cmst-test:default\\\" cannot patch resource \\\"deployments\\\" in API group \\\"apps\\\" in the namespace \\\"cmst-test\\\"\",\"reason\":\"Forbidden\",\"details\":{\"name\":\"app=spring-config-client\",\"group\":\"apps\",\"kind\":\"deployments\"},\"code\":403}\n\n\n",
+        "\nDuring handling of the above exception, another exception occurred:\n\n",
+        "Traceback (most recent call last):\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/chaoslib/provider/python.py\", line 55, in run_python_activity\n    return func(**arguments)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/chaosk8s/deployment/actions.py\", line 80, in scale_deployment\n    s=name, r=replicas, e=str(e)))\n",
+        "chaoslib.exceptions.ActivityFailed: failed to scale 'app=spring-config-client' to 0 replicas: (403)\nReason: Forbidden\nHTTP response headers: HTTPHeaderDict({'Audit-Id': '6e8f2bc1-0265-4e98-aec2-c28a7f2ff3e0', 'Cache-Control': 'no-cache, private', 'Content-Type': 'application/json', 'X-Content-Type-Options': 'nosniff', 'X-Kubernetes-Pf-Flowschema-Uid': '12514990-4cc8-4d9b-9d51-f0ba95b70a4d', 'X-Kubernetes-Pf-Prioritylevel-Uid': 'd492cebf-0100-4286-9409-b05e9f326f7e', 'Date': 'Thu, 25 Feb 2021 14:15:42 GMT', 'Content-Length': '395'})\nHTTP response body: {\"kind\":\"Status\",\"apiVersion\":\"v1\",\"metadata\":{},\"status\":\"Failure\",\"message\":\"deployments.apps \\\"app=spring-config-client\\\" is forbidden: User \\\"system:serviceaccount:cmst-test:default\\\" cannot patch resource \\\"deployments\\\" in API group \\\"apps\\\" in the namespace \\\"cmst-test\\\"\",\"reason\":\"Forbidden\",\"details\":{\"name\":\"app=spring-config-client\",\"group\":\"apps\",\"kind\":\"deployments\"},\"code\":403}\n\n\n",
+        "\nDuring handling of the above exception, another exception occurred:\n\n",
+        "chaoslib.exceptions.ActivityFailed: chaoslib.exceptions.ActivityFailed: failed to scale 'app=spring-config-client' to 0 replicas: (403)\nReason: Forbidden\nHTTP response headers: HTTPHeaderDict({'Audit-Id': '6e8f2bc1-0265-4e98-aec2-c28a7f2ff3e0', 'Cache-Control': 'no-cache, private', 'Content-Type': 'application/json', 'X-Content-Type-Options': 'nosniff', 'X-Kubernetes-Pf-Flowschema-Uid': '12514990-4cc8-4d9b-9d51-f0ba95b70a4d', 'X-Kubernetes-Pf-Prioritylevel-Uid': 'd492cebf-0100-4286-9409-b05e9f326f7e', 'Date': 'Thu, 25 Feb 2021 14:15:42 GMT', 'Content-Length': '395'})\nHTTP response body: {\"kind\":\"Status\",\"apiVersion\":\"v1\",\"metadata\":{},\"status\":\"Failure\",\"message\":\"deployments.apps \\\"app=spring-config-client\\\" is forbidden: User \\\"system:serviceaccount:cmst-test:default\\\" cannot patch resource \\\"deployments\\\" in API group \\\"apps\\\" in the namespace \\\"cmst-test\\\"\",\"reason\":\"Forbidden\",\"details\":{\"name\":\"app=spring-config-client\",\"group\":\"apps\",\"kind\":\"deployments\"},\"code\":403}\n"
+      ],
+      "start": "2021-02-25T14:15:42.072782",
+      "end": "2021-02-25T14:15:42.087217",
+      "duration": 0.014435
+    },
+    {
+      "activity": {
+        "name": "remove-service-endpoint",
+        "type": "action",
+        "provider": {
+          "func": "remove_service_endpoint",
+          "type": "python",
+          "module": "chaosk8s.actions",
+          "arguments": {
+            "name": "app=spring-config-client",
+            "ns": "cmst-test"
+          }
+        }
+      },
+      "output": null,
+      "status": "failed",
+      "exception": [
+        "Traceback (most recent call last):\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/chaoslib/provider/python.py\", line 55, in run_python_activity\n    return func(**arguments)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/chaosk8s/actions.py\", line 30, in remove_service_endpoint\n    delete_service(name, ns, secrets)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/chaosk8s/service/actions.py\", line 43, in delete_service\n    v1.delete_namespaced_service(name, namespace=ns)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api/core_v1_api.py\", line 12906, in delete_namespaced_service\n    return self.delete_namespaced_service_with_http_info(name, namespace, **kwargs)  # noqa: E501\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api/core_v1_api.py\", line 13027, in delete_namespaced_service_with_http_info\n    collection_formats=collection_formats)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 353, in call_api\n    _preload_content, _request_timeout, _host)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 184, in __call_api\n    _request_timeout=_request_timeout)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 420, in request\n    body=body)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/rest.py\", line 270, in DELETE\n    body=body)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/rest.py\", line 233, in request\n    raise ApiException(http_resp=r)\n",
+        "kubernetes.client.exceptions.ApiException: (403)\nReason: Forbidden\nHTTP response headers: HTTPHeaderDict({'Audit-Id': 'a7a3874f-ee99-4219-b316-0c1fed6812d8', 'Cache-Control': 'no-cache, private', 'Content-Type': 'application/json', 'X-Content-Type-Options': 'nosniff', 'X-Kubernetes-Pf-Flowschema-Uid': '12514990-4cc8-4d9b-9d51-f0ba95b70a4d', 'X-Kubernetes-Pf-Prioritylevel-Uid': 'd492cebf-0100-4286-9409-b05e9f326f7e', 'Date': 'Thu, 25 Feb 2021 14:15:42 GMT', 'Content-Length': '363'})\nHTTP response body: {\"kind\":\"Status\",\"apiVersion\":\"v1\",\"metadata\":{},\"status\":\"Failure\",\"message\":\"services \\\"app=spring-config-client\\\" is forbidden: User \\\"system:serviceaccount:cmst-test:default\\\" cannot delete resource \\\"services\\\" in API group \\\"\\\" in the namespace \\\"cmst-test\\\"\",\"reason\":\"Forbidden\",\"details\":{\"name\":\"app=spring-config-client\",\"kind\":\"services\"},\"code\":403}\n\n\n",
+        "\nDuring handling of the above exception, another exception occurred:\n\n",
+        "chaoslib.exceptions.ActivityFailed: kubernetes.client.exceptions.ApiException: (403)\nReason: Forbidden\nHTTP response headers: HTTPHeaderDict({'Audit-Id': 'a7a3874f-ee99-4219-b316-0c1fed6812d8', 'Cache-Control': 'no-cache, private', 'Content-Type': 'application/json', 'X-Content-Type-Options': 'nosniff', 'X-Kubernetes-Pf-Flowschema-Uid': '12514990-4cc8-4d9b-9d51-f0ba95b70a4d', 'X-Kubernetes-Pf-Prioritylevel-Uid': 'd492cebf-0100-4286-9409-b05e9f326f7e', 'Date': 'Thu, 25 Feb 2021 14:15:42 GMT', 'Content-Length': '363'})\nHTTP response body: {\"kind\":\"Status\",\"apiVersion\":\"v1\",\"metadata\":{},\"status\":\"Failure\",\"message\":\"services \\\"app=spring-config-client\\\" is forbidden: User \\\"system:serviceaccount:cmst-test:default\\\" cannot delete resource \\\"services\\\" in API group \\\"\\\" in the namespace \\\"cmst-test\\\"\",\"reason\":\"Forbidden\",\"details\":{\"name\":\"app=spring-config-client\",\"kind\":\"services\"},\"code\":403}\n"
+      ],
+      "start": "2021-02-25T14:15:42.087453",
+      "end": "2021-02-25T14:15:42.101112",
+      "duration": 0.013659
+    },
+    {
+      "activity": {
+        "name": "scale-microservice",
+        "type": "action",
+        "provider": {
+          "func": "scale_microservice",
+          "type": "python",
+          "module": "chaosk8s.actions",
+          "arguments": {
+            "replicas": 0,
+            "name": "app=spring-config-client",
+            "ns": "cmst-test"
+          }
+        }
+      },
+      "output": null,
+      "status": "failed",
+      "exception": [
+        "Traceback (most recent call last):\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/chaosk8s/deployment/actions.py\", line 76, in scale_deployment\n    v1.patch_namespaced_deployment(name=name, namespace=ns, body=body)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api/apps_v1_api.py\", line 4511, in patch_namespaced_deployment\n    return self.patch_namespaced_deployment_with_http_info(name, namespace, body, **kwargs)  # noqa: E501\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api/apps_v1_api.py\", line 4636, in patch_namespaced_deployment_with_http_info\n    collection_formats=collection_formats)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 353, in call_api\n    _preload_content, _request_timeout, _host)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 184, in __call_api\n    _request_timeout=_request_timeout)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 413, in request\n    body=body)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/rest.py\", line 300, in PATCH\n    body=body)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/rest.py\", line 233, in request\n    raise ApiException(http_resp=r)\n",
+        "kubernetes.client.exceptions.ApiException: (403)\nReason: Forbidden\nHTTP response headers: HTTPHeaderDict({'Audit-Id': '6ebd498a-e084-4e93-9505-a4fe074dc021', 'Cache-Control': 'no-cache, private', 'Content-Type': 'application/json', 'X-Content-Type-Options': 'nosniff', 'X-Kubernetes-Pf-Flowschema-Uid': '12514990-4cc8-4d9b-9d51-f0ba95b70a4d', 'X-Kubernetes-Pf-Prioritylevel-Uid': 'd492cebf-0100-4286-9409-b05e9f326f7e', 'Date': 'Thu, 25 Feb 2021 14:15:42 GMT', 'Content-Length': '395'})\nHTTP response body: {\"kind\":\"Status\",\"apiVersion\":\"v1\",\"metadata\":{},\"status\":\"Failure\",\"message\":\"deployments.apps \\\"app=spring-config-client\\\" is forbidden: User \\\"system:serviceaccount:cmst-test:default\\\" cannot patch resource \\\"deployments\\\" in API group \\\"apps\\\" in the namespace \\\"cmst-test\\\"\",\"reason\":\"Forbidden\",\"details\":{\"name\":\"app=spring-config-client\",\"group\":\"apps\",\"kind\":\"deployments\"},\"code\":403}\n\n\n",
+        "\nDuring handling of the above exception, another exception occurred:\n\n",
+        "Traceback (most recent call last):\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/chaoslib/provider/python.py\", line 55, in run_python_activity\n    return func(**arguments)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/chaosk8s/actions.py\", line 39, in scale_microservice\n    scale_deployment(name, replicas, ns, secrets)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/chaosk8s/deployment/actions.py\", line 80, in scale_deployment\n    s=name, r=replicas, e=str(e)))\n",
+        "chaoslib.exceptions.ActivityFailed: failed to scale 'app=spring-config-client' to 0 replicas: (403)\nReason: Forbidden\nHTTP response headers: HTTPHeaderDict({'Audit-Id': '6ebd498a-e084-4e93-9505-a4fe074dc021', 'Cache-Control': 'no-cache, private', 'Content-Type': 'application/json', 'X-Content-Type-Options': 'nosniff', 'X-Kubernetes-Pf-Flowschema-Uid': '12514990-4cc8-4d9b-9d51-f0ba95b70a4d', 'X-Kubernetes-Pf-Prioritylevel-Uid': 'd492cebf-0100-4286-9409-b05e9f326f7e', 'Date': 'Thu, 25 Feb 2021 14:15:42 GMT', 'Content-Length': '395'})\nHTTP response body: {\"kind\":\"Status\",\"apiVersion\":\"v1\",\"metadata\":{},\"status\":\"Failure\",\"message\":\"deployments.apps \\\"app=spring-config-client\\\" is forbidden: User \\\"system:serviceaccount:cmst-test:default\\\" cannot patch resource \\\"deployments\\\" in API group \\\"apps\\\" in the namespace \\\"cmst-test\\\"\",\"reason\":\"Forbidden\",\"details\":{\"name\":\"app=spring-config-client\",\"group\":\"apps\",\"kind\":\"deployments\"},\"code\":403}\n\n\n",
+        "\nDuring handling of the above exception, another exception occurred:\n\n",
+        "chaoslib.exceptions.ActivityFailed: chaoslib.exceptions.ActivityFailed: failed to scale 'app=spring-config-client' to 0 replicas: (403)\nReason: Forbidden\nHTTP response headers: HTTPHeaderDict({'Audit-Id': '6ebd498a-e084-4e93-9505-a4fe074dc021', 'Cache-Control': 'no-cache, private', 'Content-Type': 'application/json', 'X-Content-Type-Options': 'nosniff', 'X-Kubernetes-Pf-Flowschema-Uid': '12514990-4cc8-4d9b-9d51-f0ba95b70a4d', 'X-Kubernetes-Pf-Prioritylevel-Uid': 'd492cebf-0100-4286-9409-b05e9f326f7e', 'Date': 'Thu, 25 Feb 2021 14:15:42 GMT', 'Content-Length': '395'})\nHTTP response body: {\"kind\":\"Status\",\"apiVersion\":\"v1\",\"metadata\":{},\"status\":\"Failure\",\"message\":\"deployments.apps \\\"app=spring-config-client\\\" is forbidden: User \\\"system:serviceaccount:cmst-test:default\\\" cannot patch resource \\\"deployments\\\" in API group \\\"apps\\\" in the namespace \\\"cmst-test\\\"\",\"reason\":\"Forbidden\",\"details\":{\"name\":\"app=spring-config-client\",\"group\":\"apps\",\"kind\":\"deployments\"},\"code\":403}\n"
+      ],
+      "start": "2021-02-25T14:15:42.101313",
+      "end": "2021-02-25T14:15:42.133990",
+      "duration": 0.032677
+    },
+    {
+      "activity": {
+        "name": "microservice-available-and-healthy",
+        "type": "probe",
+        "provider": {
+          "func": "microservice_available_and_healthy",
+          "type": "python",
+          "module": "chaosk8s.probes",
+          "arguments": {
+            "name": "spring-config-client"
+          }
+        }
+      },
+      "output": null,
+      "status": "failed",
+      "exception": [
+        "Traceback (most recent call last):\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/chaoslib/provider/python.py\", line 55, in run_python_activity\n    return func(**arguments)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/chaosk8s/probes.py\", line 39, in microservice_available_and_healthy\n    deployment_available_and_healthy(name, ns, label_selector, secrets)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/chaosk8s/deployment/probes.py\", line 40, in deployment_available_and_healthy\n    ret = v1.list_namespaced_deployment(ns, field_selector=field_selector)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api/apps_v1_api.py\", line 3269, in list_namespaced_deployment\n    return self.list_namespaced_deployment_with_http_info(namespace, **kwargs)  # noqa: E501\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api/apps_v1_api.py\", line 3394, in list_namespaced_deployment_with_http_info\n    collection_formats=collection_formats)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 353, in call_api\n    _preload_content, _request_timeout, _host)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 184, in __call_api\n    _request_timeout=_request_timeout)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 377, in request\n    headers=headers)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/rest.py\", line 243, in GET\n    query_params=query_params)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/rest.py\", line 233, in request\n    raise ApiException(http_resp=r)\n",
+        "kubernetes.client.exceptions.ApiException: (403)\nReason: Forbidden\nHTTP response headers: HTTPHeaderDict({'Audit-Id': 'f3882156-1d9d-4089-89a3-3bc680fa4bde', 'Cache-Control': 'no-cache, private', 'Content-Type': 'application/json', 'X-Content-Type-Options': 'nosniff', 'X-Kubernetes-Pf-Flowschema-Uid': '12514990-4cc8-4d9b-9d51-f0ba95b70a4d', 'X-Kubernetes-Pf-Prioritylevel-Uid': 'd492cebf-0100-4286-9409-b05e9f326f7e', 'Date': 'Thu, 25 Feb 2021 14:15:42 GMT', 'Content-Length': '384'})\nHTTP response body: {\"kind\":\"Status\",\"apiVersion\":\"v1\",\"metadata\":{},\"status\":\"Failure\",\"message\":\"deployments.apps \\\"spring-config-client\\\" is forbidden: User \\\"system:serviceaccount:cmst-test:default\\\" cannot list resource \\\"deployments\\\" in API group \\\"apps\\\" in the namespace \\\"default\\\"\",\"reason\":\"Forbidden\",\"details\":{\"name\":\"spring-config-client\",\"group\":\"apps\",\"kind\":\"deployments\"},\"code\":403}\n\n\n",
+        "\nDuring handling of the above exception, another exception occurred:\n\n",
+        "chaoslib.exceptions.ActivityFailed: kubernetes.client.exceptions.ApiException: (403)\nReason: Forbidden\nHTTP response headers: HTTPHeaderDict({'Audit-Id': 'f3882156-1d9d-4089-89a3-3bc680fa4bde', 'Cache-Control': 'no-cache, private', 'Content-Type': 'application/json', 'X-Content-Type-Options': 'nosniff', 'X-Kubernetes-Pf-Flowschema-Uid': '12514990-4cc8-4d9b-9d51-f0ba95b70a4d', 'X-Kubernetes-Pf-Prioritylevel-Uid': 'd492cebf-0100-4286-9409-b05e9f326f7e', 'Date': 'Thu, 25 Feb 2021 14:15:42 GMT', 'Content-Length': '384'})\nHTTP response body: {\"kind\":\"Status\",\"apiVersion\":\"v1\",\"metadata\":{},\"status\":\"Failure\",\"message\":\"deployments.apps \\\"spring-config-client\\\" is forbidden: User \\\"system:serviceaccount:cmst-test:default\\\" cannot list resource \\\"deployments\\\" in API group \\\"apps\\\" in the namespace \\\"default\\\"\",\"reason\":\"Forbidden\",\"details\":{\"name\":\"spring-config-client\",\"group\":\"apps\",\"kind\":\"deployments\"},\"code\":403}\n"
+      ],
+      "start": "2021-02-25T14:15:42.134234",
+      "end": "2021-02-25T14:15:42.182481",
+      "duration": 0.048247
+    },
+    {
+      "activity": {
+        "name": "read-microservices-logs",
+        "type": "probe",
+        "provider": {
+          "module": "chaosk8s.probes",
+          "func": "read_microservices_logs",
+          "type": "python"
+        }
+      },
+      "output": null,
+      "status": "failed",
+      "exception": [
+        "Traceback (most recent call last):\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/chaoslib/provider/python.py\", line 55, in run_python_activity\n    return func(**arguments)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/chaosk8s/pod/probes.py\", line 48, in read_pod_logs\n    ret = v1.list_namespaced_pod(ns, label_selector=label_selector)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api/core_v1_api.py\", line 15302, in list_namespaced_pod\n    return self.list_namespaced_pod_with_http_info(namespace, **kwargs)  # noqa: E501\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api/core_v1_api.py\", line 15427, in list_namespaced_pod_with_http_info\n    collection_formats=collection_formats)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 353, in call_api\n    _preload_content, _request_timeout, _host)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 184, in __call_api\n    _request_timeout=_request_timeout)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 377, in request\n    headers=headers)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/rest.py\", line 243, in GET\n    query_params=query_params)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/rest.py\", line 233, in request\n    raise ApiException(http_resp=r)\n",
+        "kubernetes.client.exceptions.ApiException: (403)\nReason: Forbidden\nHTTP response headers: HTTPHeaderDict({'Audit-Id': '1d4512b1-2d5f-4f5e-8b6b-c8511bd20e18', 'Cache-Control': 'no-cache, private', 'Content-Type': 'application/json', 'X-Content-Type-Options': 'nosniff', 'X-Kubernetes-Pf-Flowschema-Uid': '12514990-4cc8-4d9b-9d51-f0ba95b70a4d', 'X-Kubernetes-Pf-Prioritylevel-Uid': 'd492cebf-0100-4286-9409-b05e9f326f7e', 'Date': 'Thu, 25 Feb 2021 14:15:42 GMT', 'Content-Length': '284'})\nHTTP response body: {\"kind\":\"Status\",\"apiVersion\":\"v1\",\"metadata\":{},\"status\":\"Failure\",\"message\":\"pods is forbidden: User \\\"system:serviceaccount:cmst-test:default\\\" cannot list resource \\\"pods\\\" in API group \\\"\\\" in the namespace \\\"default\\\"\",\"reason\":\"Forbidden\",\"details\":{\"kind\":\"pods\"},\"code\":403}\n\n\n",
+        "\nDuring handling of the above exception, another exception occurred:\n\n",
+        "chaoslib.exceptions.ActivityFailed: kubernetes.client.exceptions.ApiException: (403)\nReason: Forbidden\nHTTP response headers: HTTPHeaderDict({'Audit-Id': '1d4512b1-2d5f-4f5e-8b6b-c8511bd20e18', 'Cache-Control': 'no-cache, private', 'Content-Type': 'application/json', 'X-Content-Type-Options': 'nosniff', 'X-Kubernetes-Pf-Flowschema-Uid': '12514990-4cc8-4d9b-9d51-f0ba95b70a4d', 'X-Kubernetes-Pf-Prioritylevel-Uid': 'd492cebf-0100-4286-9409-b05e9f326f7e', 'Date': 'Thu, 25 Feb 2021 14:15:42 GMT', 'Content-Length': '284'})\nHTTP response body: {\"kind\":\"Status\",\"apiVersion\":\"v1\",\"metadata\":{},\"status\":\"Failure\",\"message\":\"pods is forbidden: User \\\"system:serviceaccount:cmst-test:default\\\" cannot list resource \\\"pods\\\" in API group \\\"\\\" in the namespace \\\"default\\\"\",\"reason\":\"Forbidden\",\"details\":{\"kind\":\"pods\"},\"code\":403}\n"
+      ],
+      "start": "2021-02-25T14:15:42.182796",
+      "end": "2021-02-25T14:15:42.193544",
+      "duration": 0.010748
+    }
+  ],
+  "rollbacks": [],
+  "end": "2021-02-25T14:15:42.262820",
+  "duration": 0.8323664665222168
+}
