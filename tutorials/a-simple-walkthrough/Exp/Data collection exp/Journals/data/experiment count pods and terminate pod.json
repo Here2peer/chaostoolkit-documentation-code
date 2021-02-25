@@ -1,0 +1,148 @@
+{
+  "chaoslib-version": "1.16.0",
+  "platform": "Linux-4.18.0-193.29.1.el8_2.x86_64-x86_64-with-redhat-8.3-Ootpa",
+  "node": "chaos-toolkit-test-79cdb9fc78-h76q9",
+  "experiment": {
+    "version": "0.0.1",
+    "title": "What are the possibility's of using the Chaos Toolkit in OpenShift at DUO",
+    "description": "Check what parts of the Chaos Toolkit are usable on the platform of DUO",
+    "tags": [
+      "kubernetes"
+    ],
+    "steady-state-hypothesis": {
+      "title": "Verifying services are healthy and pod accepts api request",
+      "probes": [
+        {
+          "name": "count-pods",
+          "type": "probe",
+          "tolerance": 14,
+          "provider": {
+            "module": "chaosk8s.pod.probes",
+            "func": "count_pods",
+            "type": "python",
+            "arguments": {
+              "label_selector": "app=spring-config-client",
+              "ns": "cmst-test"
+            }
+          }
+        }
+      ]
+    },
+    "method": [
+      {
+        "name": "terminate-pods",
+        "type": "action",
+        "provider": {
+          "module": "chaosk8s.pod.actions",
+          "func": "terminate_pods",
+          "type": "python",
+          "arguments": {
+            "ns": "cmst-test",
+            "name_pattern": "ysui-testinpipeline-spring-config-client"
+          }
+        }
+      }
+    ],
+    "dry": false
+  },
+  "start": "2021-02-25T13:23:37.630428",
+  "status": "completed",
+  "deviated": false,
+  "steady_states": {
+    "before": {
+      "steady_state_met": true,
+      "probes": [
+        {
+          "activity": {
+            "name": "count-pods",
+            "type": "probe",
+            "tolerance": 14,
+            "provider": {
+              "module": "chaosk8s.pod.probes",
+              "func": "count_pods",
+              "type": "python",
+              "arguments": {
+                "label_selector": "app=spring-config-client",
+                "ns": "cmst-test"
+              }
+            }
+          },
+          "output": 14,
+          "status": "succeeded",
+          "start": "2021-02-25T13:23:37.630872",
+          "end": "2021-02-25T13:23:37.696596",
+          "duration": 0.065724,
+          "tolerance_met": true
+        }
+      ]
+    },
+    "after": {
+      "steady_state_met": true,
+      "probes": [
+        {
+          "activity": {
+            "name": "count-pods",
+            "type": "probe",
+            "tolerance": 14,
+            "provider": {
+              "module": "chaosk8s.pod.probes",
+              "func": "count_pods",
+              "type": "python",
+              "arguments": {
+                "label_selector": "app=spring-config-client",
+                "ns": "cmst-test"
+              }
+            }
+          },
+          "output": 14,
+          "status": "succeeded",
+          "start": "2021-02-25T13:23:37.781686",
+          "end": "2021-02-25T13:23:37.846669",
+          "duration": 0.064983,
+          "tolerance_met": true
+        }
+      ]
+    },
+    "during": []
+  },
+  "run": [
+    {
+      "activity": {
+        "name": "terminate-pods",
+        "type": "action",
+        "provider": {
+          "module": "chaosk8s.pod.actions",
+          "func": "terminate_pods",
+          "type": "python",
+          "arguments": {
+            "ns": "cmst-test",
+            "name_pattern": "ysui-testinpipeline-spring-config-client"
+          }
+        }
+      },
+      "output": null,
+      "status": "failed",
+      "exception": [
+        "Traceback (most recent call last):\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/chaoslib/provider/python.py\", line 55, in run_python_activity\n    return func(**arguments)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/chaosk8s/pod/actions.py\", line 68, in terminate_pods\n    v1.delete_namespaced_pod(p.metadata.name, ns, body=body)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api/core_v1_api.py\", line 12141, in delete_namespaced_pod\n    return self.delete_namespaced_pod_with_http_info(name, namespace, **kwargs)  # noqa: E501\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api/core_v1_api.py\", line 12262, in delete_namespaced_pod_with_http_info\n    collection_formats=collection_formats)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 353, in call_api\n    _preload_content, _request_timeout, _host)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 184, in __call_api\n    _request_timeout=_request_timeout)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 420, in request\n    body=body)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/rest.py\", line 270, in DELETE\n    body=body)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/rest.py\", line 233, in request\n    raise ApiException(http_resp=r)\n",
+        "kubernetes.client.exceptions.ApiException: (403)\nReason: Forbidden\nHTTP response headers: HTTPHeaderDict({'Audit-Id': 'f2778c42-e662-4aa9-b799-2ebcb3122fde', 'Cache-Control': 'no-cache, private', 'Content-Type': 'application/json', 'X-Content-Type-Options': 'nosniff', 'X-Kubernetes-Pf-Flowschema-Uid': '12514990-4cc8-4d9b-9d51-f0ba95b70a4d', 'X-Kubernetes-Pf-Prioritylevel-Uid': 'd492cebf-0100-4286-9409-b05e9f326f7e', 'Date': 'Thu, 25 Feb 2021 13:23:37 GMT', 'Content-Length': '417'})\nHTTP response body: {\"kind\":\"Status\",\"apiVersion\":\"v1\",\"metadata\":{},\"status\":\"Failure\",\"message\":\"pods \\\"ysui-testinpipeline-spring-config-client-5cc7d59478-scxpx\\\" is forbidden: User \\\"system:serviceaccount:cmst-test:default\\\" cannot delete resource \\\"pods\\\" in API group \\\"\\\" in the namespace \\\"cmst-test\\\"\",\"reason\":\"Forbidden\",\"details\":{\"name\":\"ysui-testinpipeline-spring-config-client-5cc7d59478-scxpx\",\"kind\":\"pods\"},\"code\":403}\n\n\n",
+        "\nDuring handling of the above exception, another exception occurred:\n\n",
+        "chaoslib.exceptions.ActivityFailed: kubernetes.client.exceptions.ApiException: (403)\nReason: Forbidden\nHTTP response headers: HTTPHeaderDict({'Audit-Id': 'f2778c42-e662-4aa9-b799-2ebcb3122fde', 'Cache-Control': 'no-cache, private', 'Content-Type': 'application/json', 'X-Content-Type-Options': 'nosniff', 'X-Kubernetes-Pf-Flowschema-Uid': '12514990-4cc8-4d9b-9d51-f0ba95b70a4d', 'X-Kubernetes-Pf-Prioritylevel-Uid': 'd492cebf-0100-4286-9409-b05e9f326f7e', 'Date': 'Thu, 25 Feb 2021 13:23:37 GMT', 'Content-Length': '417'})\nHTTP response body: {\"kind\":\"Status\",\"apiVersion\":\"v1\",\"metadata\":{},\"status\":\"Failure\",\"message\":\"pods \\\"ysui-testinpipeline-spring-config-client-5cc7d59478-scxpx\\\" is forbidden: User \\\"system:serviceaccount:cmst-test:default\\\" cannot delete resource \\\"pods\\\" in API group \\\"\\\" in the namespace \\\"cmst-test\\\"\",\"reason\":\"Forbidden\",\"details\":{\"name\":\"ysui-testinpipeline-spring-config-client-5cc7d59478-scxpx\",\"kind\":\"pods\"},\"code\":403}\n"
+      ],
+      "start": "2021-02-25T13:23:37.697173",
+      "end": "2021-02-25T13:23:37.781352",
+      "duration": 0.084179
+    }
+  ],
+  "rollbacks": [],
+  "end": "2021-02-25T13:23:37.847208",
+  "duration": 0.21790504455566406
+}

@@ -1,0 +1,150 @@
+{
+  "chaoslib-version": "1.16.0",
+  "platform": "Linux-4.18.0-193.29.1.el8_2.x86_64-x86_64-with-redhat-8.3-Ootpa",
+  "node": "chaos-toolkit-test-79cdb9fc78-4btmc",
+  "experiment": {
+    "version": "0.0.1",
+    "title": "What are the possibility's of using the Chaos Toolkit in OpenShift at DUO",
+    "description": "Check what parts of the Chaos Toolkit are usable on the platform of DUO",
+    "tags": [
+      "kubernetes"
+    ],
+    "steady-state-hypothesis": {
+      "title": "Verifying services are healthy and pod accepts api request",
+      "probes": [
+        {
+          "name": "service-is-initialized",
+          "type": "probe",
+          "tolerance": true,
+          "provider": {
+            "module": "chaosk8s.service.probes",
+            "func": "service_is_initialized",
+            "type": "python",
+            "arguments": {
+              "ns": "cmst-test",
+              "name": "cmst-test-release-spring-config-client-dennis-service"
+            }
+          }
+        }
+      ]
+    },
+    "method": [
+      {
+        "name": "deployment_available_and_healthy",
+        "type": "probe",
+        "provider": {
+          "func": "deployment_available_and_healthy",
+          "type": "python",
+          "module": "chaosk8s.deployment.probes",
+          "arguments": {
+            "name": "in727san-ta-wiremock",
+            "label_selector": "app=ta-wiremock",
+            "ns": "cmst-test"
+          }
+        }
+      }
+    ],
+    "dry": false
+  },
+  "start": "2021-02-25T13:32:02.968057",
+  "status": "completed",
+  "deviated": false,
+  "steady_states": {
+    "before": {
+      "steady_state_met": true,
+      "probes": [
+        {
+          "activity": {
+            "name": "service-is-initialized",
+            "type": "probe",
+            "tolerance": true,
+            "provider": {
+              "module": "chaosk8s.service.probes",
+              "func": "service_is_initialized",
+              "type": "python",
+              "arguments": {
+                "ns": "cmst-test",
+                "name": "cmst-test-release-spring-config-client-dennis-service"
+              }
+            }
+          },
+          "output": true,
+          "status": "succeeded",
+          "start": "2021-02-25T13:32:02.968546",
+          "end": "2021-02-25T13:32:02.987198",
+          "duration": 0.018652,
+          "tolerance_met": true
+        }
+      ]
+    },
+    "after": {
+      "steady_state_met": true,
+      "probes": [
+        {
+          "activity": {
+            "name": "service-is-initialized",
+            "type": "probe",
+            "tolerance": true,
+            "provider": {
+              "module": "chaosk8s.service.probes",
+              "func": "service_is_initialized",
+              "type": "python",
+              "arguments": {
+                "ns": "cmst-test",
+                "name": "cmst-test-release-spring-config-client-dennis-service"
+              }
+            }
+          },
+          "output": true,
+          "status": "succeeded",
+          "start": "2021-02-25T13:32:03.001113",
+          "end": "2021-02-25T13:32:03.028138",
+          "duration": 0.027025,
+          "tolerance_met": true
+        }
+      ]
+    },
+    "during": []
+  },
+  "run": [
+    {
+      "activity": {
+        "name": "deployment_available_and_healthy",
+        "type": "probe",
+        "provider": {
+          "func": "deployment_available_and_healthy",
+          "type": "python",
+          "module": "chaosk8s.deployment.probes",
+          "arguments": {
+            "name": "in727san-ta-wiremock",
+            "label_selector": "app=ta-wiremock",
+            "ns": "cmst-test"
+          }
+        }
+      },
+      "output": null,
+      "status": "failed",
+      "exception": [
+        "Traceback (most recent call last):\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/chaoslib/provider/python.py\", line 55, in run_python_activity\n    return func(**arguments)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/chaosk8s/deployment/probes.py\", line 38, in deployment_available_and_healthy\n    label_selector=label_selector)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api/apps_v1_api.py\", line 3269, in list_namespaced_deployment\n    return self.list_namespaced_deployment_with_http_info(namespace, **kwargs)  # noqa: E501\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api/apps_v1_api.py\", line 3394, in list_namespaced_deployment_with_http_info\n    collection_formats=collection_formats)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 353, in call_api\n    _preload_content, _request_timeout, _host)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 184, in __call_api\n    _request_timeout=_request_timeout)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 377, in request\n    headers=headers)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/rest.py\", line 243, in GET\n    query_params=query_params)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/rest.py\", line 233, in request\n    raise ApiException(http_resp=r)\n",
+        "kubernetes.client.exceptions.ApiException: (403)\nReason: Forbidden\nHTTP response headers: HTTPHeaderDict({'Audit-Id': '13a299f4-cb0b-4fe3-9ff7-13db96e94651', 'Cache-Control': 'no-cache, private', 'Content-Type': 'application/json', 'X-Content-Type-Options': 'nosniff', 'X-Kubernetes-Pf-Flowschema-Uid': '12514990-4cc8-4d9b-9d51-f0ba95b70a4d', 'X-Kubernetes-Pf-Prioritylevel-Uid': 'd492cebf-0100-4286-9409-b05e9f326f7e', 'Date': 'Thu, 25 Feb 2021 13:32:02 GMT', 'Content-Length': '386'})\nHTTP response body: {\"kind\":\"Status\",\"apiVersion\":\"v1\",\"metadata\":{},\"status\":\"Failure\",\"message\":\"deployments.apps \\\"in727san-ta-wiremock\\\" is forbidden: User \\\"system:serviceaccount:cmst-test:default\\\" cannot list resource \\\"deployments\\\" in API group \\\"apps\\\" in the namespace \\\"cmst-test\\\"\",\"reason\":\"Forbidden\",\"details\":{\"name\":\"in727san-ta-wiremock\",\"group\":\"apps\",\"kind\":\"deployments\"},\"code\":403}\n\n\n",
+        "\nDuring handling of the above exception, another exception occurred:\n\n",
+        "chaoslib.exceptions.ActivityFailed: kubernetes.client.exceptions.ApiException: (403)\nReason: Forbidden\nHTTP response headers: HTTPHeaderDict({'Audit-Id': '13a299f4-cb0b-4fe3-9ff7-13db96e94651', 'Cache-Control': 'no-cache, private', 'Content-Type': 'application/json', 'X-Content-Type-Options': 'nosniff', 'X-Kubernetes-Pf-Flowschema-Uid': '12514990-4cc8-4d9b-9d51-f0ba95b70a4d', 'X-Kubernetes-Pf-Prioritylevel-Uid': 'd492cebf-0100-4286-9409-b05e9f326f7e', 'Date': 'Thu, 25 Feb 2021 13:32:02 GMT', 'Content-Length': '386'})\nHTTP response body: {\"kind\":\"Status\",\"apiVersion\":\"v1\",\"metadata\":{},\"status\":\"Failure\",\"message\":\"deployments.apps \\\"in727san-ta-wiremock\\\" is forbidden: User \\\"system:serviceaccount:cmst-test:default\\\" cannot list resource \\\"deployments\\\" in API group \\\"apps\\\" in the namespace \\\"cmst-test\\\"\",\"reason\":\"Forbidden\",\"details\":{\"name\":\"in727san-ta-wiremock\",\"group\":\"apps\",\"kind\":\"deployments\"},\"code\":403}\n"
+      ],
+      "start": "2021-02-25T13:32:02.987689",
+      "end": "2021-02-25T13:32:03.000783",
+      "duration": 0.013094
+    }
+  ],
+  "rollbacks": [],
+  "end": "2021-02-25T13:32:03.028577",
+  "duration": 0.061644792556762695
+}

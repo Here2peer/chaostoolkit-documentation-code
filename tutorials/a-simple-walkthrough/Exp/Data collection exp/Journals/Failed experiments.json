@@ -1,0 +1,22 @@
+"title": "What are the possibility's of using the Chaos Toolkit in OpenShift at DUO",
+	"description": "Check what parts of the Chaos Toolkit are usable on the platform of DUO",
+	
+"name": "all-our-microservices-should-be-healthy",
+
+          "type": "probe",
+
+          "tolerance": 200,
+
+          "provider": {
+
+            "type": "python",
+
+            "module": "chaosk8s.probes",
+
+            "func": "all_pods_healthy",
+
+            "arguments": {
+
+              "ns": "cmst-test"}
+
+          }

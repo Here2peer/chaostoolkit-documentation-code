@@ -3,22 +3,6 @@
 	"title": "What is the impact of deleting a pod without a grace period?",
 	"description": "If the pod is terminated, we should spin up a new pod.",
 	"tags": ["kubernetes"],
-
-	"secrets": {
-		"k8s": {
-			"kubernetes": {
-				"KUBERNETES_HOST": "192.168.1.3:80",
-				"KUBERNETES_CERT_FILE": {
-					"type": "env",
-					"key": "kubecert"
-				},
-				"KUBERNETES_KEY_FILE": {
-					"type": "env",
-					"key": "kubekey"
-				}
-			}
-		}
-	},
 	"steady-state-hypothesis": {
 		"title": "Verifying services are healthy and pod accepts api request",
 		"probes": [{
@@ -32,17 +16,6 @@
 				"func": "all_pods_healthy",
 				"arguments": {}
 			}
-		}],
-		"probes": [{
-			"type": "action",
-			"name": "we-can-request-list-of-books",
-			"tolerance": 200,
-			"provider": {
-				"type": "http",
-				"timeout": 3,
-				"verify_tls": false,
-				"url": "http://192.168.1.12:30571/all"
-			}
 		}]
 	},
 	"method": [
@@ -55,20 +28,9 @@
 				"func": "delete_pods",
 				"arguments": {
 					"name": "book",
-					"label_selector": "app.kubernetes.io/name=load-book-api",
+					"label_selector": "app=springboot-api-openshift-cmst-test",
 					"ns": "default"
 				}
-			}
-		},
-		{
-			"type": "action",
-			"name": "we-can-request-list-of-books",
-			"tolerance": 200,
-			"provider": {
-				"type": "http",
-				"timeout": 15,
-				"verify_tls": false,
-				"url": "http://192.168.1.12:30571/all"
 			}
 		}
 	]

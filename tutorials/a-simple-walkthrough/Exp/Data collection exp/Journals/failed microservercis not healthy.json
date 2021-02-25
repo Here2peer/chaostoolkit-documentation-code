@@ -1,0 +1,558 @@
+{
+
+  "chaoslib-version": "1.16.0",
+
+  "platform": "Linux-4.18.0-193.29.1.el8_2.x86_64-x86_64-with-redhat-8.3-Ootpa",
+
+  "node": "chaos-toolkit-test-79cdb9fc78-r4sf6",
+
+  "experiment": {
+
+    "version": "0.0.1",
+
+	"title": "What are the possibility's of using the Chaos Toolkit in OpenShift at DUO",
+	"description": "Check what parts of the Chaos Toolkit are usable on the platform of DUO",
+
+    "tags": [
+
+      "kubernetes"
+
+    ],
+
+    "steady-state-hypothesis": {
+
+      "title": "Verifying services are healthy and pod accepts api request",
+
+      "probes": [
+
+        {
+
+          "name": "all-our-microservices-should-be-healthy",
+
+          "type": "probe",
+
+          "tolerance": 200,
+
+          "provider": {
+
+            "type": "python",
+
+            "module": "chaosk8s.probes",
+
+            "func": "all_pods_healthy",
+
+            "arguments": {
+
+              "ns": "cmst-test"
+
+            }
+
+          }
+
+        }
+
+      ]
+
+    },
+
+    "method": [
+
+      {
+
+        "name": "count-pods",
+
+        "type": "probe",
+
+        "provider": {
+
+          "module": "chaosk8s.pod.probes",
+
+          "func": "count_pods",
+
+          "type": "python",
+
+          "arguments": {
+
+            "label_selector": "app=springboot-api-openshift-cmst-test",
+
+            "ns": "cmst-test"
+
+          }
+
+        }
+
+      },
+
+      {
+
+        "name": "pod-is-not-available",
+
+        "type": "probe",
+
+        "provider": {
+
+          "func": "pod_is_not_available",
+
+          "type": "python",
+
+          "module": "chaosk8s.pod.probes",
+
+          "arguments": {
+
+            "name": "app=springboot-api-openshift-cmst-test",
+
+            "ns": "cmst-test"
+
+          }
+
+        }
+
+      },
+
+      {
+
+        "name": "pods-in-conditions",
+
+        "type": "probe",
+
+        "provider": {
+
+          "module": "chaosk8s.pod.probes",
+
+          "func": "pods_in_conditions",
+
+          "type": "python",
+
+          "arguments": {
+
+            "label_selector": "app=springboot-api-openshift-cmst-test",
+
+            "conditions": [],
+
+            "ns": "cmst-test"
+
+          }
+
+        }
+
+      },
+
+      {
+
+        "name": "pods-in-phase",
+
+        "type": "probe",
+
+        "provider": {
+
+          "func": "pods_in_phase",
+
+          "type": "python",
+
+          "module": "chaosk8s.pod.probes",
+
+          "arguments": {
+
+            "label_selector": "",
+
+            "ns": "cmst-test"
+
+          }
+
+        }
+
+      },
+
+      {
+
+        "name": "pods-not-in-phase",
+
+        "type": "probe",
+
+        "provider": {
+
+          "func": "pods_not_in_phase",
+
+          "type": "python",
+
+          "module": "chaosk8s.pod.probes",
+
+          "arguments": {
+
+            "label_selector": "",
+
+            "ns": "cmst-test"
+
+          }
+
+        }
+
+      },
+
+      {
+
+        "name": "read-pod-logs",
+
+        "type": "probe",
+
+        "provider": {
+
+          "module": "chaosk8s.pod.probes",
+
+          "func": "read_pod_logs",
+
+          "type": "python",
+
+          "arguments": {
+
+            "ns": "cmst-test"
+
+          }
+
+        }
+
+      },
+
+      {
+
+        "name": "terminate-pods",
+
+        "type": "action",
+
+        "provider": {
+
+          "module": "chaosk8s.pod.actions",
+
+          "func": "terminate_pods",
+
+          "type": "python",
+
+          "arguments": {
+
+            "ns": "cmst-test"
+
+          }
+
+        }
+
+      },
+
+      {
+
+        "name": "statefulset-fully-available",
+
+        "type": "probe",
+
+        "provider": {
+
+          "func": "statefulset_fully_available",
+
+          "type": "python",
+
+          "module": "chaosk8s.statefulset.probes",
+
+          "arguments": {
+
+           "name": "app=springboot-api-openshift-cmst-test",
+
+            "ns": "cmst-test"
+
+          }
+
+        }
+
+      },
+
+      {
+
+        "name": "service-is-initialized",
+
+        "type": "probe",
+
+        "provider": {
+
+          "module": "chaosk8s.service.probes",
+
+          "func": "service_is_initialized",
+
+          "type": "python",
+
+          "arguments": {
+
+            "ns": "cmst-test"
+
+          }
+
+        }
+
+      },
+
+      {
+
+        "name": "delete-deployment",
+
+        "type": "action",
+
+        "provider": {
+
+          "func": "delete_deployment",
+
+          "type": "python",
+
+          "module": "chaosk8s.deployment.actions",
+
+          "arguments": {
+
+            "name": "app=springboot-api-openshift-cmst-test",
+
+            "ns": "cmst-test"
+
+          }
+
+        }
+
+      },
+
+      {
+
+        "name": "deployment-available-and-healthy",
+
+        "type": "probe",
+
+        "provider": {
+
+          "func": "deployment_available_and_healthy",
+
+          "type": "python",
+
+          "module": "chaosk8s.deployment.probes",
+
+          "arguments": {
+
+            "name": "app=springboot-api-openshift-cmst-test"
+
+          }
+
+        }
+
+      },
+
+      {
+
+        "name": "scale-deployment",
+
+        "type": "action",
+
+        "provider": {
+
+          "func": "scale_deployment",
+
+          "type": "python",
+
+          "module": "chaosk8s.deployment.actions",
+
+          "arguments": {
+
+            "replicas": 0,
+
+            "name": "app=springboot-api-openshift-cmst-test",
+
+            "ns": "cmst-test"
+
+          }
+
+        }
+
+      },
+
+      {
+
+        "name": "remove-service-endpoint",
+
+        "type": "action",
+
+        "provider": {
+
+          "func": "remove_service_endpoint",
+
+          "type": "python",
+
+          "module": "chaosk8s.actions",
+
+          "arguments": {
+
+            "name": "app=springboot-api-openshift-cmst-test",
+
+            "ns": "cmst-test"
+
+          }
+
+        }
+
+      },
+
+      {
+
+        "name": "scale-microservice",
+
+        "type": "action",
+
+        "provider": {
+
+          "func": "scale_microservice",
+
+          "type": "python",
+
+          "module": "chaosk8s.actions",
+
+          "arguments": {
+
+            "replicas": 0,
+
+            "name": "app=springboot-api-openshift-cmst-test",
+
+            "ns": "cmst-test"
+
+          }
+
+        }
+
+      },
+
+      {
+
+        "name": "microservice-available-and-healthy",
+
+        "type": "probe",
+
+        "provider": {
+
+          "func": "microservice_available_and_healthy",
+
+          "type": "python",
+
+          "module": "chaosk8s.probes",
+
+          "arguments": {
+
+            "name": "app=springboot-api-openshift-cmst-test"
+
+          }
+
+        }
+
+      },
+
+      {
+
+        "name": "read-microservices-logs",
+
+        "type": "probe",
+
+        "provider": {
+
+          "module": "chaosk8s.probes",
+
+          "func": "read_microservices_logs",
+
+          "type": "python"
+
+        }
+
+      }
+
+    ],
+
+    "dry": false
+
+  },
+
+  "start": "2021-02-25T10:35:01.975381",
+
+  "status": "failed",
+
+  "deviated": false,
+
+  "steady_states": {
+
+    "before": {
+
+      "steady_state_met": false,
+
+      "probes": [
+
+        {
+
+          "activity": {
+
+            "name": "all-our-microservices-should-be-healthy",
+
+            "type": "probe",
+
+            "tolerance": 200,
+
+            "provider": {
+
+              "type": "python",
+
+              "module": "chaosk8s.probes",
+
+              "func": "all_pods_healthy",
+
+              "arguments": {
+
+                "ns": "cmst-test"
+
+              }
+
+            }
+
+          },
+
+          "output": null,
+
+          "status": "failed",
+
+          "exception": [
+
+            "Traceback (most recent call last):\n",
+
+            "  File \"/usr/local/lib/python3.6/site-packages/chaoslib/provider/python.py\", line 55, in run_python_activity\n    return func(**arguments)\n",
+
+            "  File \"/usr/local/lib/python3.6/site-packages/chaosk8s/pod/probes.py\", line 282, in all_pods_healthy\n    raise ActivityFailed(\"the system is unhealthy\")\n",
+
+            "chaoslib.exceptions.ActivityFailed: the system is unhealthy\n",
+
+            "\nDuring handling of the above exception, another exception occurred:\n\n",
+
+            "chaoslib.exceptions.ActivityFailed: chaoslib.exceptions.ActivityFailed: the system is unhealthy\n"
+
+          ],
+
+          "start": "2021-02-25T10:35:01.975834",
+
+          "end": "2021-02-25T10:35:02.054571",
+
+          "duration": 0.078737,
+
+          "tolerance_met": false
+
+        }
+
+      ]
+
+    },
+
+    "after": null,
+
+    "during": []
+
+  },
+
+  "run": [],
+
+  "rollbacks": [],
+
+  "end": "2021-02-25T10:35:02.054885",
+
+  "duration": 0.08040571212768555

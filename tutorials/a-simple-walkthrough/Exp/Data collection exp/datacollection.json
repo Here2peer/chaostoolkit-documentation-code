@@ -1,0 +1,226 @@
+{
+	"version": "0.0.1",
+	"title": "What is the impact of deleting a pod without a grace period?",
+	"description": "If the pod is terminated, we should spin up a new pod.",
+	"tags": ["kubernetes"],
+	"steady-state-hypothesis": {
+		"title": "Verifying services are healthy and pod accepts api request",
+		"probes": [{
+			"name": "all-our-microservices-should-be-healthy",
+			"type": "probe",
+			"secrets": ["k8s"],
+			"tolerance": false,
+			"provider": {
+				"type": "python",
+				"module": "chaosk8s.probes",
+				"func": "all_pods_healthy",
+				"arguments": {
+					"ns": "cmst-test"}
+			}
+		}]
+	},
+	"method": [
+		{
+			"name": "count-pods",
+			"type": "probe",
+			"provider": {
+				"module": "chaosk8s.pod.probes",
+				"func": "count_pods",
+				"type": "python",
+				"arguments": {
+					"label_selector": "app=springboot-api-openshift-cmst-test",
+					"ns": "cmst-test"
+				}
+			}
+		},
+		{
+			"name": "pod-is-not-available",
+			"type": "probe",
+			"provider": {
+				"func": "pod_is_not_available",
+				"type": "python",
+				"module": "chaosk8s.pod.probes",
+				"arguments": {
+					"name": "app=springboot-api-openshift-cmst-test",
+					"ns": "cmst-test"
+				}
+			}
+		},
+		{
+			"name": "pods-in-conditions",
+			"type": "probe",
+			"provider": {
+				"module": "chaosk8s.pod.probes",
+				"func": "pods_in_conditions",
+				"type": "python",
+				"arguments": {
+					"label_selector": "app=springboot-api-openshift-cmst-test",
+					"conditions": [],
+					"ns": "cmst-test"
+				}
+			}
+		},
+		{
+			"name": "pods-in-phase",
+			"type": "probe",
+			"provider": {
+				"func": "pods_in_phase",
+				"type": "python",
+				"module": "chaosk8s.pod.probes",
+				"arguments": {
+					"label_selector": "",
+					"ns": "cmst-test"
+				}
+			}
+		},
+		{
+			"name": "pods-not-in-phase",
+			"type": "probe",
+			"provider": {
+				"func": "pods_not_in_phase",
+				"type": "python",
+				"module": "chaosk8s.pod.probes",
+				"arguments": {
+					"label_selector": "",
+					"ns": "cmst-test"
+				}
+			}
+		},
+		{
+			"name": "read-pod-logs",
+			"type": "probe",
+			"provider": {
+				"module": "chaosk8s.pod.probes",
+				"func": "read_pod_logs",
+				"type": "python",
+				"arguments": {
+					"ns": "cmst-test"
+				}
+			}
+		},
+		{
+			"name": "terminate-pods",
+			"type": "action",
+			"provider": {
+				"module": "chaosk8s.pod.actions",
+				"func": "terminate_pods",
+				"type": "python",
+				"arguments": {
+					"ns": "cmst-test"
+				}
+			}
+		},
+		{
+			"name": "statefulset-fully-available",
+			"type": "probe",
+			"provider": {
+				"func": "statefulset_fully_available",
+				"type": "python",
+				"module": "chaosk8s.statefulset.probes",
+				"arguments": {
+					"name": "app=springboot-api-openshift-cmst-test",
+					"ns": "cmst-test"
+				}
+			}
+		},
+		{
+			"name": "service-is-initialized",
+			"type": "probe",
+			"provider": {
+				"module": "chaosk8s.service.probes",
+				"func": "service_is_initialized",
+				"type": "python",
+				"arguments": {
+					"ns": "cmst-test"
+				}
+			}
+		},
+		{
+			"name": "delete-deployment",
+			"type": "action",
+			"provider": {
+				"func": "delete_deployment",
+				"type": "python",
+				"module": "chaosk8s.deployment.actions",
+				"arguments": {
+					"name": "app=springboot-api-openshift-cmst-test",
+					"ns": "cmst-test"
+				}
+			}
+		},
+		{
+			"name": "deployment-available-and-healthy",
+			"type": "probe",
+			"provider": {
+				"func": "deployment_available_and_healthy",
+				"type": "python",
+				"module": "chaosk8s.deployment.probes",
+				"arguments": {
+					"name": "app=springboot-api-openshift-cmst-test"
+				}
+			}
+		},
+		{
+			"name": "scale-deployment",
+			"type": "action",
+			"provider": {
+				"func": "scale_deployment",
+				"type": "python",
+				"module": "chaosk8s.deployment.actions",
+				"arguments": {
+					"replicas": 0,
+					"name": "app=springboot-api-openshift-cmst-test",
+					"ns": "cmst-test"
+				}
+			}
+		},
+		{
+			"name": "remove-service-endpoint",
+			"type": "action",
+			"provider": {
+				"func": "remove_service_endpoint",
+				"type": "python",
+				"module": "chaosk8s.actions",
+				"arguments": {
+					"name": "app=springboot-api-openshift-cmst-test",
+					"ns": "cmst-test"
+				}
+			}
+		},
+		{
+			"name": "scale-microservice",
+			"type": "action",
+			"provider": {
+				"func": "scale_microservice",
+				"type": "python",
+				"module": "chaosk8s.actions",
+				"arguments": {
+					"replicas": 0,
+					"name": "app=springboot-api-openshift-cmst-test",
+					"ns": "cmst-test"
+				}
+			}
+		},
+		{
+			"name": "microservice-available-and-healthy",
+			"type": "probe",
+			"provider": {
+				"func": "microservice_available_and_healthy",
+				"type": "python",
+				"module": "chaosk8s.probes",
+				"arguments": {
+					"name": "app=springboot-api-openshift-cmst-test"
+				}
+			}
+		},
+		{
+			"name": "read-microservices-logs",
+			"type": "probe",
+			"provider": {
+				"module": "chaosk8s.probes",
+				"func": "read_microservices_logs",
+				"type": "python"
+			}
+		}
+	]
+}

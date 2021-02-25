@@ -1,0 +1,94 @@
+{
+  "chaoslib-version": "1.16.0",
+  "platform": "Linux-4.18.0-193.29.1.el8_2.x86_64-x86_64-with-redhat-8.3-Ootpa",
+  "node": "chaos-toolkit-test-79cdb9fc78-df6h5",
+  "experiment": {
+    "version": "0.0.1",
+    "title": "What are the possibility's of using the Chaos Toolkit in OpenShift at DUO",
+    "description": "Check what parts of the Chaos Toolkit are usable on the platform of DUO",
+    "tags": [
+      "kubernetes"
+    ],
+    "steady-state-hypothesis": {
+      "title": "Verifying services are healthy and pod accepts api request",
+      "probes": [
+        {
+          "name": "read-microservices-logs",
+          "type": "probe",
+          "tolerance": true,
+          "provider": {
+            "module": "chaosk8s.probes",
+            "func": "read_microservices_logs",
+            "type": "python"
+          }
+        }
+      ]
+    },
+    "method": [
+      {
+        "name": "scale-deployment",
+        "type": "action",
+        "provider": {
+          "func": "scale_deployment",
+          "type": "python",
+          "module": "chaosk8s.deployment.actions",
+          "arguments": {
+            "replicas": 0,
+            "ns": "cmst-test",
+            "name": "testing-chaos"
+          }
+        }
+      }
+    ],
+    "dry": false
+  },
+  "start": "2021-02-25T13:41:08.537983",
+  "status": "failed",
+  "deviated": false,
+  "steady_states": {
+    "before": {
+      "steady_state_met": false,
+      "probes": [
+        {
+          "activity": {
+            "name": "read-microservices-logs",
+            "type": "probe",
+            "tolerance": true,
+            "provider": {
+              "module": "chaosk8s.probes",
+              "func": "read_microservices_logs",
+              "type": "python"
+            }
+          },
+          "output": null,
+          "status": "failed",
+          "exception": [
+            "Traceback (most recent call last):\n",
+            "  File \"/usr/local/lib/python3.6/site-packages/chaoslib/provider/python.py\", line 55, in run_python_activity\n    return func(**arguments)\n",
+            "  File \"/usr/local/lib/python3.6/site-packages/chaosk8s/pod/probes.py\", line 48, in read_pod_logs\n    ret = v1.list_namespaced_pod(ns, label_selector=label_selector)\n",
+            "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api/core_v1_api.py\", line 15302, in list_namespaced_pod\n    return self.list_namespaced_pod_with_http_info(namespace, **kwargs)  # noqa: E501\n",
+            "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api/core_v1_api.py\", line 15427, in list_namespaced_pod_with_http_info\n    collection_formats=collection_formats)\n",
+            "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 353, in call_api\n    _preload_content, _request_timeout, _host)\n",
+            "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 184, in __call_api\n    _request_timeout=_request_timeout)\n",
+            "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 377, in request\n    headers=headers)\n",
+            "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/rest.py\", line 243, in GET\n    query_params=query_params)\n",
+            "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/rest.py\", line 233, in request\n    raise ApiException(http_resp=r)\n",
+            "kubernetes.client.exceptions.ApiException: (403)\nReason: Forbidden\nHTTP response headers: HTTPHeaderDict({'Audit-Id': 'df6704ff-4bd2-4c4c-bab4-ca6daebb9d8a', 'Cache-Control': 'no-cache, private', 'Content-Type': 'application/json', 'X-Content-Type-Options': 'nosniff', 'X-Kubernetes-Pf-Flowschema-Uid': '12514990-4cc8-4d9b-9d51-f0ba95b70a4d', 'X-Kubernetes-Pf-Prioritylevel-Uid': 'd492cebf-0100-4286-9409-b05e9f326f7e', 'Date': 'Thu, 25 Feb 2021 13:41:08 GMT', 'Content-Length': '284'})\nHTTP response body: {\"kind\":\"Status\",\"apiVersion\":\"v1\",\"metadata\":{},\"status\":\"Failure\",\"message\":\"pods is forbidden: User \\\"system:serviceaccount:cmst-test:default\\\" cannot list resource \\\"pods\\\" in API group \\\"\\\" in the namespace \\\"default\\\"\",\"reason\":\"Forbidden\",\"details\":{\"kind\":\"pods\"},\"code\":403}\n\n\n",
+            "\nDuring handling of the above exception, another exception occurred:\n\n",
+            "chaoslib.exceptions.ActivityFailed: kubernetes.client.exceptions.ApiException: (403)\nReason: Forbidden\nHTTP response headers: HTTPHeaderDict({'Audit-Id': 'df6704ff-4bd2-4c4c-bab4-ca6daebb9d8a', 'Cache-Control': 'no-cache, private', 'Content-Type': 'application/json', 'X-Content-Type-Options': 'nosniff', 'X-Kubernetes-Pf-Flowschema-Uid': '12514990-4cc8-4d9b-9d51-f0ba95b70a4d', 'X-Kubernetes-Pf-Prioritylevel-Uid': 'd492cebf-0100-4286-9409-b05e9f326f7e', 'Date': 'Thu, 25 Feb 2021 13:41:08 GMT', 'Content-Length': '284'})\nHTTP response body: {\"kind\":\"Status\",\"apiVersion\":\"v1\",\"metadata\":{},\"status\":\"Failure\",\"message\":\"pods is forbidden: User \\\"system:serviceaccount:cmst-test:default\\\" cannot list resource \\\"pods\\\" in API group \\\"\\\" in the namespace \\\"default\\\"\",\"reason\":\"Forbidden\",\"details\":{\"kind\":\"pods\"},\"code\":403}\n"
+          ],
+          "start": "2021-02-25T13:41:08.538455",
+          "end": "2021-02-25T13:41:08.558896",
+          "duration": 0.020441,
+          "tolerance_met": false
+        }
+      ]
+    },
+    "after": null,
+    "during": []
+  },
+  "run": [],
+  "rollbacks": [],
+  "end": "2021-02-25T13:41:08.559199",
+  "duration": 0.022414445877075195
+}

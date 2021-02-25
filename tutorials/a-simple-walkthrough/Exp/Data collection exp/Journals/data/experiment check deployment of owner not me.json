@@ -1,0 +1,258 @@
+{
+  "chaoslib-version": "1.16.0",
+  "platform": "Linux-4.18.0-193.29.1.el8_2.x86_64-x86_64-with-redhat-8.3-Ootpa",
+  "node": "chaos-toolkit-test-79cdb9fc78-7nrnj",
+  "experiment": {
+    "version": "0.0.1",
+    "title": "What are the possibility's of using the Chaos Toolkit in OpenShift at DUO",
+    "description": "Check what parts of the Chaos Toolkit are usable on the platform of DUO",
+    "tags": [
+      "kubernetes"
+    ],
+    "steady-state-hypothesis": {
+      "title": "Verifying services are healthy and pod accepts api request",
+      "probes": [
+        {
+          "name": "deployment-available-and-healthy",
+          "type": "probe",
+          "tolerance": true,
+          "provider": {
+            "func": "deployment_available_and_healthy",
+            "type": "python",
+            "module": "chaosk8s.deployment.probes",
+            "arguments": {
+              "label_selector": "app=ta-wiremock",
+              "ns": "cmst-test",
+              "name": "in727san-ta-wiremock"
+            }
+          }
+        }
+      ]
+    },
+    "method": [
+      {
+        "name": "count-pods",
+        "type": "probe",
+        "provider": {
+          "module": "chaosk8s.pod.probes",
+          "func": "count_pods",
+          "type": "python",
+          "arguments": {
+            "label_selector": "app=spring-config-client",
+            "ns": "cmst-test"
+          }
+        }
+      },
+      {
+        "name": "pod-is-not-available",
+        "type": "probe",
+        "provider": {
+          "func": "pod_is_not_available",
+          "type": "python",
+          "module": "chaosk8s.pod.probes",
+          "arguments": {
+            "name": "in727san-ta-wiremock",
+            "ns": "cmst-test"
+          }
+        }
+      },
+      {
+        "name": "pods-in-conditions",
+        "type": "probe",
+        "provider": {
+          "module": "chaosk8s.pod.probes",
+          "func": "pods_in_conditions",
+          "type": "python",
+          "arguments": {
+            "label_selector": "app=ta-wiremock",
+            "conditions": [],
+            "ns": "cmst-test"
+          }
+        }
+      },
+      {
+        "name": "pods-in-phase",
+        "type": "probe",
+        "provider": {
+          "func": "pods_in_phase",
+          "type": "python",
+          "module": "chaosk8s.pod.probes",
+          "arguments": {
+            "label_selector": "app=ta-wiremock",
+            "ns": "cmst-test"
+          }
+        }
+      },
+      {
+        "name": "pods-not-in-phase",
+        "type": "probe",
+        "provider": {
+          "func": "pods_not_in_phase",
+          "type": "python",
+          "module": "chaosk8s.pod.probes",
+          "arguments": {
+            "label_selector": "app=ta-wiremock",
+            "ns": "cmst-test"
+          }
+        }
+      },
+      {
+        "name": "read-pod-logs",
+        "type": "probe",
+        "provider": {
+          "module": "chaosk8s.pod.probes",
+          "func": "read_pod_logs",
+          "type": "python",
+          "arguments": {
+            "label_selector": "app=ta-wiremock",
+            "ns": "cmst-test"
+          }
+        }
+      },
+      {
+        "name": "terminate-pods",
+        "type": "action",
+        "provider": {
+          "module": "chaosk8s.pod.actions",
+          "func": "terminate_pods",
+          "type": "python",
+          "arguments": {
+            "ns": "cmst-test",
+            "name_pattern": "ysui-testinpipeline-spring-config-client"
+          }
+        }
+      },
+      {
+        "name": "statefulset-fully-available",
+        "type": "probe",
+        "provider": {
+          "func": "statefulset_fully_available",
+          "type": "python",
+          "module": "chaosk8s.statefulset.probes",
+          "arguments": {
+            "name": "test",
+            "ns": "cmst-test"
+          }
+        }
+      },
+      {
+        "name": "service-is-initialized",
+        "type": "probe",
+        "provider": {
+          "module": "chaosk8s.service.probes",
+          "func": "service_is_initialized",
+          "type": "python",
+          "arguments": {
+            "ns": "cmst-test",
+            "name": "cmst-test-release-spring-config-client-dennis-service"
+          }
+        }
+      },
+      {
+        "name": "delete-deployment",
+        "type": "action",
+        "provider": {
+          "func": "delete_deployment",
+          "type": "python",
+          "module": "chaosk8s.deployment.actions",
+          "arguments": {
+            "name": "testing-chaos",
+            "ns": "cmst-test"
+          }
+        }
+      },
+      {
+        "name": "scale-deployment",
+        "type": "action",
+        "provider": {
+          "func": "scale_deployment",
+          "type": "python",
+          "module": "chaosk8s.deployment.actions",
+          "arguments": {
+            "replicas": 1,
+            "ns": "cmst-test",
+            "name": "testing-chaos"
+          }
+        }
+      },
+      {
+        "name": "microservice-available-and-healthy",
+        "type": "probe",
+        "provider": {
+          "func": "microservice_available_and_healthy",
+          "type": "python",
+          "module": "chaosk8s.probes",
+          "arguments": {
+            "name": "in727san-ta-wiremock",
+            "label_selector": "app=ta-wiremock",
+            "ns": "cmst-test"
+          }
+        }
+      },
+      {
+        "name": "read-microservices-logs",
+        "type": "probe",
+        "provider": {
+          "module": "chaosk8s.probes",
+          "func": "read_microservices_logs",
+          "type": "python"
+        }
+      }
+    ],
+    "dry": false
+  },
+  "start": "2021-02-25T11:23:01.181620",
+  "status": "failed",
+  "deviated": false,
+  "steady_states": {
+    "before": {
+      "steady_state_met": false,
+      "probes": [
+        {
+          "activity": {
+            "name": "deployment-available-and-healthy",
+            "type": "probe",
+            "tolerance": true,
+            "provider": {
+              "func": "deployment_available_and_healthy",
+              "type": "python",
+              "module": "chaosk8s.deployment.probes",
+              "arguments": {
+                "label_selector": "app=ta-wiremock",
+                "ns": "cmst-test",
+                "name": "in727san-ta-wiremock"
+              }
+            }
+          },
+          "output": null,
+          "status": "failed",
+          "exception": [
+            "Traceback (most recent call last):\n",
+            "  File \"/usr/local/lib/python3.6/site-packages/chaoslib/provider/python.py\", line 55, in run_python_activity\n    return func(**arguments)\n",
+            "  File \"/usr/local/lib/python3.6/site-packages/chaosk8s/deployment/probes.py\", line 38, in deployment_available_and_healthy\n    label_selector=label_selector)\n",
+            "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api/apps_v1_api.py\", line 3269, in list_namespaced_deployment\n    return self.list_namespaced_deployment_with_http_info(namespace, **kwargs)  # noqa: E501\n",
+            "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api/apps_v1_api.py\", line 3394, in list_namespaced_deployment_with_http_info\n    collection_formats=collection_formats)\n",
+            "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 353, in call_api\n    _preload_content, _request_timeout, _host)\n",
+            "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 184, in __call_api\n    _request_timeout=_request_timeout)\n",
+            "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 377, in request\n    headers=headers)\n",
+            "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/rest.py\", line 243, in GET\n    query_params=query_params)\n",
+            "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/rest.py\", line 233, in request\n    raise ApiException(http_resp=r)\n",
+            "kubernetes.client.exceptions.ApiException: (403)\nReason: Forbidden\nHTTP response headers: HTTPHeaderDict({'Audit-Id': '6953bd2d-57bd-4456-8d43-ac637bbbeb0d', 'Cache-Control': 'no-cache, private', 'Content-Type': 'application/json', 'X-Content-Type-Options': 'nosniff', 'X-Kubernetes-Pf-Flowschema-Uid': '12514990-4cc8-4d9b-9d51-f0ba95b70a4d', 'X-Kubernetes-Pf-Prioritylevel-Uid': 'd492cebf-0100-4286-9409-b05e9f326f7e', 'Date': 'Thu, 25 Feb 2021 11:23:01 GMT', 'Content-Length': '386'})\nHTTP response body: {\"kind\":\"Status\",\"apiVersion\":\"v1\",\"metadata\":{},\"status\":\"Failure\",\"message\":\"deployments.apps \\\"in727san-ta-wiremock\\\" is forbidden: User \\\"system:serviceaccount:cmst-test:default\\\" cannot list resource \\\"deployments\\\" in API group \\\"apps\\\" in the namespace \\\"cmst-test\\\"\",\"reason\":\"Forbidden\",\"details\":{\"name\":\"in727san-ta-wiremock\",\"group\":\"apps\",\"kind\":\"deployments\"},\"code\":403}\n\n\n",
+            "\nDuring handling of the above exception, another exception occurred:\n\n",
+            "chaoslib.exceptions.ActivityFailed: kubernetes.client.exceptions.ApiException: (403)\nReason: Forbidden\nHTTP response headers: HTTPHeaderDict({'Audit-Id': '6953bd2d-57bd-4456-8d43-ac637bbbeb0d', 'Cache-Control': 'no-cache, private', 'Content-Type': 'application/json', 'X-Content-Type-Options': 'nosniff', 'X-Kubernetes-Pf-Flowschema-Uid': '12514990-4cc8-4d9b-9d51-f0ba95b70a4d', 'X-Kubernetes-Pf-Prioritylevel-Uid': 'd492cebf-0100-4286-9409-b05e9f326f7e', 'Date': 'Thu, 25 Feb 2021 11:23:01 GMT', 'Content-Length': '386'})\nHTTP response body: {\"kind\":\"Status\",\"apiVersion\":\"v1\",\"metadata\":{},\"status\":\"Failure\",\"message\":\"deployments.apps \\\"in727san-ta-wiremock\\\" is forbidden: User \\\"system:serviceaccount:cmst-test:default\\\" cannot list resource \\\"deployments\\\" in API group \\\"apps\\\" in the namespace \\\"cmst-test\\\"\",\"reason\":\"Forbidden\",\"details\":{\"name\":\"in727san-ta-wiremock\",\"group\":\"apps\",\"kind\":\"deployments\"},\"code\":403}\n"
+          ],
+          "start": "2021-02-25T11:23:01.182100",
+          "end": "2021-02-25T11:23:01.200851",
+          "duration": 0.018751,
+          "tolerance_met": false
+        }
+      ]
+    },
+    "after": null,
+    "during": []
+  },
+  "run": [],
+  "rollbacks": [],
+  "end": "2021-02-25T11:23:01.201354",
+  "duration": 0.02056431770324707
+ }

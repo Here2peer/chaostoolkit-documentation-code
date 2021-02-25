@@ -1,0 +1,104 @@
+{
+  "chaoslib-version": "1.16.0",
+  "platform": "Linux-4.18.0-193.29.1.el8_2.x86_64-x86_64-with-redhat-8.3-Ootpa",
+  "node": "chaos-toolkit-test-79cdb9fc78-kdz98",
+  "experiment": {
+    "version": "0.0.1",
+    "title": "What are the possibility's of using the Chaos Toolkit in OpenShift at DUO",
+    "description": "Check what parts of the Chaos Toolkit are usable on the platform of DUO",
+    "tags": [
+      "kubernetes"
+    ],
+    "steady-state-hypothesis": {
+      "title": "Verifying services are healthy and pod accepts api request",
+      "probes": [
+        {
+          "name": "scale-deployment",
+          "type": "action",
+          "tolerance": true,
+          "provider": {
+            "func": "scale_deployment",
+            "type": "python",
+            "module": "chaosk8s.deployment.actions",
+            "arguments": {
+              "replicas": 0,
+              "ns": "cmst-test",
+              "name": "testing-chaos"
+            }
+          }
+        }
+      ]
+    },
+    "method": [
+      {
+        "name": "read-microservices-logs",
+        "type": "probe",
+        "tolerance": true,
+        "provider": {
+          "module": "chaosk8s.probes",
+          "func": "read_microservices_logs",
+          "type": "python"
+        }
+      }
+    ],
+    "dry": false
+  },
+  "start": "2021-02-25T13:44:19.379823",
+  "status": "failed",
+  "deviated": false,
+  "steady_states": {
+    "before": {
+      "steady_state_met": false,
+      "probes": [
+        {
+          "activity": {
+            "name": "scale-deployment",
+            "type": "action",
+            "tolerance": true,
+            "provider": {
+              "func": "scale_deployment",
+              "type": "python",
+              "module": "chaosk8s.deployment.actions",
+              "arguments": {
+                "replicas": 0,
+                "ns": "cmst-test",
+                "name": "testing-chaos"
+              }
+            }
+          },
+          "output": null,
+          "status": "failed",
+          "exception": [
+            "Traceback (most recent call last):\n",
+            "  File \"/usr/local/lib/python3.6/site-packages/chaosk8s/deployment/actions.py\", line 76, in scale_deployment\n    v1.patch_namespaced_deployment(name=name, namespace=ns, body=body)\n",
+            "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api/apps_v1_api.py\", line 4511, in patch_namespaced_deployment\n    return self.patch_namespaced_deployment_with_http_info(name, namespace, body, **kwargs)  # noqa: E501\n",
+            "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api/apps_v1_api.py\", line 4636, in patch_namespaced_deployment_with_http_info\n    collection_formats=collection_formats)\n",
+            "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 353, in call_api\n    _preload_content, _request_timeout, _host)\n",
+            "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 184, in __call_api\n    _request_timeout=_request_timeout)\n",
+            "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 413, in request\n    body=body)\n",
+            "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/rest.py\", line 300, in PATCH\n    body=body)\n",
+            "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/rest.py\", line 233, in request\n    raise ApiException(http_resp=r)\n",
+            "kubernetes.client.exceptions.ApiException: (403)\nReason: Forbidden\nHTTP response headers: HTTPHeaderDict({'Audit-Id': '479ec95e-e4c7-4a5b-b52f-4ab728604cce', 'Cache-Control': 'no-cache, private', 'Content-Type': 'application/json', 'X-Content-Type-Options': 'nosniff', 'X-Kubernetes-Pf-Flowschema-Uid': '12514990-4cc8-4d9b-9d51-f0ba95b70a4d', 'X-Kubernetes-Pf-Prioritylevel-Uid': 'd492cebf-0100-4286-9409-b05e9f326f7e', 'Date': 'Thu, 25 Feb 2021 13:44:19 GMT', 'Content-Length': '373'})\nHTTP response body: {\"kind\":\"Status\",\"apiVersion\":\"v1\",\"metadata\":{},\"status\":\"Failure\",\"message\":\"deployments.apps \\\"testing-chaos\\\" is forbidden: User \\\"system:serviceaccount:cmst-test:default\\\" cannot patch resource \\\"deployments\\\" in API group \\\"apps\\\" in the namespace \\\"cmst-test\\\"\",\"reason\":\"Forbidden\",\"details\":{\"name\":\"testing-chaos\",\"group\":\"apps\",\"kind\":\"deployments\"},\"code\":403}\n\n\n",
+            "\nDuring handling of the above exception, another exception occurred:\n\n",
+            "Traceback (most recent call last):\n",
+            "  File \"/usr/local/lib/python3.6/site-packages/chaoslib/provider/python.py\", line 55, in run_python_activity\n    return func(**arguments)\n",
+            "  File \"/usr/local/lib/python3.6/site-packages/chaosk8s/deployment/actions.py\", line 80, in scale_deployment\n    s=name, r=replicas, e=str(e)))\n",
+            "chaoslib.exceptions.ActivityFailed: failed to scale 'testing-chaos' to 0 replicas: (403)\nReason: Forbidden\nHTTP response headers: HTTPHeaderDict({'Audit-Id': '479ec95e-e4c7-4a5b-b52f-4ab728604cce', 'Cache-Control': 'no-cache, private', 'Content-Type': 'application/json', 'X-Content-Type-Options': 'nosniff', 'X-Kubernetes-Pf-Flowschema-Uid': '12514990-4cc8-4d9b-9d51-f0ba95b70a4d', 'X-Kubernetes-Pf-Prioritylevel-Uid': 'd492cebf-0100-4286-9409-b05e9f326f7e', 'Date': 'Thu, 25 Feb 2021 13:44:19 GMT', 'Content-Length': '373'})\nHTTP response body: {\"kind\":\"Status\",\"apiVersion\":\"v1\",\"metadata\":{},\"status\":\"Failure\",\"message\":\"deployments.apps \\\"testing-chaos\\\" is forbidden: User \\\"system:serviceaccount:cmst-test:default\\\" cannot patch resource \\\"deployments\\\" in API group \\\"apps\\\" in the namespace \\\"cmst-test\\\"\",\"reason\":\"Forbidden\",\"details\":{\"name\":\"testing-chaos\",\"group\":\"apps\",\"kind\":\"deployments\"},\"code\":403}\n\n\n",
+            "\nDuring handling of the above exception, another exception occurred:\n\n",
+            "chaoslib.exceptions.ActivityFailed: chaoslib.exceptions.ActivityFailed: failed to scale 'testing-chaos' to 0 replicas: (403)\nReason: Forbidden\nHTTP response headers: HTTPHeaderDict({'Audit-Id': '479ec95e-e4c7-4a5b-b52f-4ab728604cce', 'Cache-Control': 'no-cache, private', 'Content-Type': 'application/json', 'X-Content-Type-Options': 'nosniff', 'X-Kubernetes-Pf-Flowschema-Uid': '12514990-4cc8-4d9b-9d51-f0ba95b70a4d', 'X-Kubernetes-Pf-Prioritylevel-Uid': 'd492cebf-0100-4286-9409-b05e9f326f7e', 'Date': 'Thu, 25 Feb 2021 13:44:19 GMT', 'Content-Length': '373'})\nHTTP response body: {\"kind\":\"Status\",\"apiVersion\":\"v1\",\"metadata\":{},\"status\":\"Failure\",\"message\":\"deployments.apps \\\"testing-chaos\\\" is forbidden: User \\\"system:serviceaccount:cmst-test:default\\\" cannot patch resource \\\"deployments\\\" in API group \\\"apps\\\" in the namespace \\\"cmst-test\\\"\",\"reason\":\"Forbidden\",\"details\":{\"name\":\"testing-chaos\",\"group\":\"apps\",\"kind\":\"deployments\"},\"code\":403}\n"
+          ],
+          "start": "2021-02-25T13:44:19.380349",
+          "end": "2021-02-25T13:44:19.396391",
+          "duration": 0.016042,
+          "tolerance_met": false
+        }
+      ]
+    },
+    "after": null,
+    "during": []
+  },
+  "run": [],
+  "rollbacks": [],
+  "end": "2021-02-25T13:44:19.396944",
+  "duration": 0.018486976623535156
+}

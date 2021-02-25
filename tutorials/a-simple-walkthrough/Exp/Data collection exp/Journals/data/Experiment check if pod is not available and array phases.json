@@ -1,0 +1,149 @@
+{
+  "chaoslib-version": "1.16.0",
+  "platform": "Linux-4.18.0-193.29.1.el8_2.x86_64-x86_64-with-redhat-8.3-Ootpa",
+  "node": "chaos-toolkit-test-79cdb9fc78-x2bmw",
+  "experiment": {
+    "version": "0.0.1",
+    "title": "What are the possibility's of using the Chaos Toolkit in OpenShift at DUO",
+    "description": "Check what parts of the Chaos Toolkit are usable on the platform of DUO",
+    "tags": [
+      "kubernetes"
+    ],
+    "steady-state-hypothesis": {
+      "title": "Verifying services are healthy and pod accepts api request",
+      "probes": [
+        {
+          "name": "pod-is-not-available",
+          "type": "probe",
+          "tolerance": true,
+          "provider": {
+            "func": "pod_is_not_available",
+            "type": "python",
+            "module": "chaosk8s.pod.probes",
+            "arguments": {
+              "name": "in727san-ta-wiremock",
+              "ns": "cmst-test"
+            }
+          }
+        }
+      ]
+    },
+    "method": [
+      {
+        "name": "pods-in-conditions",
+        "type": "probe",
+        "provider": {
+          "module": "chaosk8s.pod.probes",
+          "func": "pods_in_conditions",
+          "type": "python",
+          "arguments": {
+            "label_selector": "app=spring-config-client",
+            "ns": "cmst-test",
+            "conditions": [
+              "Running",
+              "Pending"
+            ]
+          }
+        }
+      }
+    ],
+    "dry": false
+  },
+  "start": "2021-02-25T13:12:26.938069",
+  "status": "completed",
+  "deviated": false,
+  "steady_states": {
+    "before": {
+      "steady_state_met": true,
+      "probes": [
+        {
+          "activity": {
+            "name": "pod-is-not-available",
+            "type": "probe",
+            "tolerance": true,
+            "provider": {
+              "func": "pod_is_not_available",
+              "type": "python",
+              "module": "chaosk8s.pod.probes",
+              "arguments": {
+                "name": "in727san-ta-wiremock",
+                "ns": "cmst-test"
+              }
+            }
+          },
+          "output": true,
+          "status": "succeeded",
+          "start": "2021-02-25T13:12:26.938855",
+          "end": "2021-02-25T13:12:26.958743",
+          "duration": 0.019888,
+          "tolerance_met": true
+        }
+      ]
+    },
+    "after": {
+      "steady_state_met": true,
+      "probes": [
+        {
+          "activity": {
+            "name": "pod-is-not-available",
+            "type": "probe",
+            "tolerance": true,
+            "provider": {
+              "func": "pod_is_not_available",
+              "type": "python",
+              "module": "chaosk8s.pod.probes",
+              "arguments": {
+                "name": "in727san-ta-wiremock",
+                "ns": "cmst-test"
+              }
+            }
+          },
+          "output": true,
+          "status": "succeeded",
+          "start": "2021-02-25T13:12:27.019622",
+          "end": "2021-02-25T13:12:27.034996",
+          "duration": 0.015374,
+          "tolerance_met": true
+        }
+      ]
+    },
+    "during": []
+  },
+  "run": [
+    {
+      "activity": {
+        "name": "pods-in-conditions",
+        "type": "probe",
+        "provider": {
+          "module": "chaosk8s.pod.probes",
+          "func": "pods_in_conditions",
+          "type": "python",
+          "arguments": {
+            "label_selector": "app=spring-config-client",
+            "ns": "cmst-test",
+            "conditions": [
+              "Running",
+              "Pending"
+            ]
+          }
+        }
+      },
+      "output": null,
+      "status": "failed",
+      "exception": [
+        "Traceback (most recent call last):\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/chaoslib/provider/python.py\", line 55, in run_python_activity\n    return func(**arguments)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/chaosk8s/pod/probes.py\", line 152, in pods_in_conditions\n    condition=condition\n",
+        "chaoslib.exceptions.ActivityFailed: pod cpqq-testinpipeline-spring-config-client-6fd9fb56fc-t6m4k does not match the following given condition: Running\n",
+        "\nDuring handling of the above exception, another exception occurred:\n\n",
+        "chaoslib.exceptions.ActivityFailed: chaoslib.exceptions.ActivityFailed: pod cpqq-testinpipeline-spring-config-client-6fd9fb56fc-t6m4k does not match the following given condition: Running\n"
+      ],
+      "start": "2021-02-25T13:12:26.959153",
+      "end": "2021-02-25T13:12:27.019276",
+      "duration": 0.060123
+    }
+  ],
+  "rollbacks": [],
+  "end": "2021-02-25T13:12:27.035581",
+  "duration": 0.09834504127502441
+}

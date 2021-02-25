@@ -1,0 +1,148 @@
+{
+  "chaoslib-version": "1.16.0",
+  "platform": "Linux-4.18.0-193.29.1.el8_2.x86_64-x86_64-with-redhat-8.3-Ootpa",
+  "node": "chaos-toolkit-test-79cdb9fc78-kp52c",
+  "experiment": {
+    "version": "0.0.1",
+    "title": "What are the possibility's of using the Chaos Toolkit in OpenShift at DUO",
+    "description": "Check what parts of the Chaos Toolkit are usable on the platform of DUO",
+    "tags": [
+      "kubernetes"
+    ],
+    "steady-state-hypothesis": {
+      "title": "Verifying services are healthy and pod accepts api request",
+      "probes": [
+        {
+          "name": "service-is-initialized",
+          "type": "probe",
+          "tolerance": true,
+          "provider": {
+            "module": "chaosk8s.service.probes",
+            "func": "service_is_initialized",
+            "type": "python",
+            "arguments": {
+              "ns": "cmst-test",
+              "name": "cmst-test-release-spring-config-client-dennis-service"
+            }
+          }
+        }
+      ]
+    },
+    "method": [
+      {
+        "name": "read-pod-logs",
+        "type": "probe",
+        "provider": {
+          "module": "chaosk8s.pod.probes",
+          "func": "read_pod_logs",
+          "type": "python",
+          "arguments": {
+            "label_selector": "app=ta-wiremock",
+            "ns": "cmst-test"
+          }
+        }
+      }
+    ],
+    "dry": false
+  },
+  "start": "2021-02-25T13:18:20.977000",
+  "status": "completed",
+  "deviated": false,
+  "steady_states": {
+    "before": {
+      "steady_state_met": true,
+      "probes": [
+        {
+          "activity": {
+            "name": "service-is-initialized",
+            "type": "probe",
+            "tolerance": true,
+            "provider": {
+              "module": "chaosk8s.service.probes",
+              "func": "service_is_initialized",
+              "type": "python",
+              "arguments": {
+                "ns": "cmst-test",
+                "name": "cmst-test-release-spring-config-client-dennis-service"
+              }
+            }
+          },
+          "output": true,
+          "status": "succeeded",
+          "start": "2021-02-25T13:18:20.977787",
+          "end": "2021-02-25T13:18:20.993971",
+          "duration": 0.016184,
+          "tolerance_met": true
+        }
+      ]
+    },
+    "after": {
+      "steady_state_met": true,
+      "probes": [
+        {
+          "activity": {
+            "name": "service-is-initialized",
+            "type": "probe",
+            "tolerance": true,
+            "provider": {
+              "module": "chaosk8s.service.probes",
+              "func": "service_is_initialized",
+              "type": "python",
+              "arguments": {
+                "ns": "cmst-test",
+                "name": "cmst-test-release-spring-config-client-dennis-service"
+              }
+            }
+          },
+          "output": true,
+          "status": "succeeded",
+          "start": "2021-02-25T13:18:21.021404",
+          "end": "2021-02-25T13:18:21.038359",
+          "duration": 0.016955,
+          "tolerance_met": true
+        }
+      ]
+    },
+    "during": []
+  },
+  "run": [
+    {
+      "activity": {
+        "name": "read-pod-logs",
+        "type": "probe",
+        "provider": {
+          "module": "chaosk8s.pod.probes",
+          "func": "read_pod_logs",
+          "type": "python",
+          "arguments": {
+            "label_selector": "app=ta-wiremock",
+            "ns": "cmst-test"
+          }
+        }
+      },
+      "output": null,
+      "status": "failed",
+      "exception": [
+        "Traceback (most recent call last):\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/chaoslib/provider/python.py\", line 55, in run_python_activity\n    return func(**arguments)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/chaosk8s/pod/probes.py\", line 78, in read_pod_logs\n    r = v1.read_namespaced_pod_log(name, **params)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api/core_v1_api.py\", line 22928, in read_namespaced_pod_log\n    return self.read_namespaced_pod_log_with_http_info(name, namespace, **kwargs)  # noqa: E501\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api/core_v1_api.py\", line 23057, in read_namespaced_pod_log_with_http_info\n    collection_formats=collection_formats)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 353, in call_api\n    _preload_content, _request_timeout, _host)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 184, in __call_api\n    _request_timeout=_request_timeout)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/api_client.py\", line 377, in request\n    headers=headers)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/rest.py\", line 243, in GET\n    query_params=query_params)\n",
+        "  File \"/usr/local/lib/python3.6/site-packages/kubernetes/client/rest.py\", line 233, in request\n    raise ApiException(http_resp=r)\n",
+        "kubernetes.client.exceptions.ApiException: (403)\nReason: Forbidden\nHTTP response headers: HTTPHeaderDict({'Audit-Id': 'cc014724-5368-4666-b73a-5a8cad6dee4d', 'Cache-Control': 'no-cache, private', 'Content-Type': 'application/json', 'X-Content-Type-Options': 'nosniff', 'Date': 'Thu, 25 Feb 2021 13:18:21 GMT', 'Content-Length': '378'})\nHTTP response body: b'{\"kind\":\"Status\",\"apiVersion\":\"v1\",\"metadata\":{},\"status\":\"Failure\",\"message\":\"pods \\\\\"in727san-ta-wiremock-5fbf548cd8-9npgl\\\\\" is forbidden: User \\\\\"system:serviceaccount:cmst-test:default\\\\\" cannot get resource \\\\\"pods/log\\\\\" in API group \\\\\"\\\\\" in the namespace \\\\\"cmst-test\\\\\"\",\"reason\":\"Forbidden\",\"details\":{\"name\":\"in727san-ta-wiremock-5fbf548cd8-9npgl\",\"kind\":\"pods\"},\"code\":403}\\n'\n\n",
+        "\nDuring handling of the above exception, another exception occurred:\n\n",
+        "chaoslib.exceptions.ActivityFailed: kubernetes.client.exceptions.ApiException: (403)\nReason: Forbidden\nHTTP response headers: HTTPHeaderDict({'Audit-Id': 'cc014724-5368-4666-b73a-5a8cad6dee4d', 'Cache-Control': 'no-cache, private', 'Content-Type': 'application/json', 'X-Content-Type-Options': 'nosniff', 'Date': 'Thu, 25 Feb 2021 13:18:21 GMT', 'Content-Length': '378'})\nHTTP response body: b'{\"kind\":\"Status\",\"apiVersion\":\"v1\",\"metadata\":{},\"status\":\"Failure\",\"message\":\"pods \\\\\"in727san-ta-wiremock-5fbf548cd8-9npgl\\\\\" is forbidden: User \\\\\"system:serviceaccount:cmst-test:default\\\\\" cannot get resource \\\\\"pods/log\\\\\" in API group \\\\\"\\\\\" in the namespace \\\\\"cmst-test\\\\\"\",\"reason\":\"Forbidden\",\"details\":{\"name\":\"in727san-ta-wiremock-5fbf548cd8-9npgl\",\"kind\":\"pods\"},\"code\":403}\\n'\n"
+      ],
+      "start": "2021-02-25T13:18:20.994374",
+      "end": "2021-02-25T13:18:21.021094",
+      "duration": 0.02672
+    }
+  ],
+  "rollbacks": [],
+  "end": "2021-02-25T13:18:21.038784",
+  "duration": 0.0625543594360351
+}
