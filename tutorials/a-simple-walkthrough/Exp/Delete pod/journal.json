@@ -72,12 +72,12 @@
     ],
     "dry": false
   },
-  "start": "2020-12-09T13:55:03.800420",
-  "status": "completed",
+  "start": "2021-01-25T13:01:39.434416",
+  "status": "failed",
   "deviated": false,
   "steady_states": {
     "before": {
-      "steady_state_met": true,
+      "steady_state_met": false,
       "probes": [
         {
           "activity": {
@@ -91,116 +91,56 @@
               "url": "http://192.168.1.12:30571/all"
             }
           },
-          "output": {
-            "status": 200,
-            "headers": {
-              "Content-Type": "application/json",
-              "Transfer-Encoding": "chunked",
-              "Date": "Wed, 09 Dec 2020 13:55:03 GMT",
-              "Keep-Alive": "timeout=60",
-              "Connection": "keep-alive"
-            },
-            "body": []
-          },
-          "status": "succeeded",
-          "start": "2020-12-09T13:55:03.800760",
-          "end": "2020-12-09T13:55:03.806899",
-          "duration": 0.006139,
-          "tolerance_met": true
+          "output": null,
+          "status": "failed",
+          "exception": [
+            "Traceback (most recent call last):\n",
+            "  File \"/home/timothy/.venvs/chaostk/lib/python3.8/site-packages/urllib3/connection.py\", line 169, in _new_conn\n    conn = connection.create_connection(\n",
+            "  File \"/home/timothy/.venvs/chaostk/lib/python3.8/site-packages/urllib3/util/connection.py\", line 96, in create_connection\n    raise err\n",
+            "  File \"/home/timothy/.venvs/chaostk/lib/python3.8/site-packages/urllib3/util/connection.py\", line 86, in create_connection\n    sock.connect(sa)\n",
+            "socket.timeout: timed out\n",
+            "\nDuring handling of the above exception, another exception occurred:\n\n",
+            "Traceback (most recent call last):\n",
+            "  File \"/home/timothy/.venvs/chaostk/lib/python3.8/site-packages/urllib3/connectionpool.py\", line 699, in urlopen\n    httplib_response = self._make_request(\n",
+            "  File \"/home/timothy/.venvs/chaostk/lib/python3.8/site-packages/urllib3/connectionpool.py\", line 394, in _make_request\n    conn.request(method, url, **httplib_request_kw)\n",
+            "  File \"/home/timothy/.venvs/chaostk/lib/python3.8/site-packages/urllib3/connection.py\", line 234, in request\n    super(HTTPConnection, self).request(method, url, body=body, headers=headers)\n",
+            "  File \"/usr/lib/python3.8/http/client.py\", line 1255, in request\n    self._send_request(method, url, body, headers, encode_chunked)\n",
+            "  File \"/usr/lib/python3.8/http/client.py\", line 1301, in _send_request\n    self.endheaders(body, encode_chunked=encode_chunked)\n",
+            "  File \"/usr/lib/python3.8/http/client.py\", line 1250, in endheaders\n    self._send_output(message_body, encode_chunked=encode_chunked)\n",
+            "  File \"/usr/lib/python3.8/http/client.py\", line 1010, in _send_output\n    self.send(msg)\n",
+            "  File \"/usr/lib/python3.8/http/client.py\", line 950, in send\n    self.connect()\n",
+            "  File \"/home/timothy/.venvs/chaostk/lib/python3.8/site-packages/urllib3/connection.py\", line 200, in connect\n    conn = self._new_conn()\n",
+            "  File \"/home/timothy/.venvs/chaostk/lib/python3.8/site-packages/urllib3/connection.py\", line 174, in _new_conn\n    raise ConnectTimeoutError(\n",
+            "urllib3.exceptions.ConnectTimeoutError: (<urllib3.connection.HTTPConnection object at 0x7f99d1c40340>, 'Connection to 192.168.1.12 timed out. (connect timeout=3)')\n",
+            "\nDuring handling of the above exception, another exception occurred:\n\n",
+            "Traceback (most recent call last):\n",
+            "  File \"/home/timothy/.venvs/chaostk/lib/python3.8/site-packages/requests/adapters.py\", line 439, in send\n    resp = conn.urlopen(\n",
+            "  File \"/home/timothy/.venvs/chaostk/lib/python3.8/site-packages/urllib3/connectionpool.py\", line 755, in urlopen\n    retries = retries.increment(\n",
+            "  File \"/home/timothy/.venvs/chaostk/lib/python3.8/site-packages/urllib3/util/retry.py\", line 573, in increment\n    raise MaxRetryError(_pool, url, error or ResponseError(cause))\n",
+            "urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='192.168.1.12', port=30571): Max retries exceeded with url: /all (Caused by ConnectTimeoutError(<urllib3.connection.HTTPConnection object at 0x7f99d1c40340>, 'Connection to 192.168.1.12 timed out. (connect timeout=3)'))\n",
+            "\nDuring handling of the above exception, another exception occurred:\n\n",
+            "Traceback (most recent call last):\n",
+            "  File \"/home/timothy/.venvs/chaostk/lib/python3.8/site-packages/chaoslib/provider/http.py\", line 51, in run_http_activity\n    r = s.get(\n",
+            "  File \"/home/timothy/.venvs/chaostk/lib/python3.8/site-packages/requests/sessions.py\", line 555, in get\n    return self.request('GET', url, **kwargs)\n",
+            "  File \"/home/timothy/.venvs/chaostk/lib/python3.8/site-packages/requests/sessions.py\", line 542, in request\n    resp = self.send(prep, **send_kwargs)\n",
+            "  File \"/home/timothy/.venvs/chaostk/lib/python3.8/site-packages/requests/sessions.py\", line 655, in send\n    r = adapter.send(request, **kwargs)\n",
+            "  File \"/home/timothy/.venvs/chaostk/lib/python3.8/site-packages/requests/adapters.py\", line 504, in send\n    raise ConnectTimeout(e, request=request)\n",
+            "requests.exceptions.ConnectTimeout: HTTPConnectionPool(host='192.168.1.12', port=30571): Max retries exceeded with url: /all (Caused by ConnectTimeoutError(<urllib3.connection.HTTPConnection object at 0x7f99d1c40340>, 'Connection to 192.168.1.12 timed out. (connect timeout=3)'))\n",
+            "\nDuring handling of the above exception, another exception occurred:\n\n",
+            "chaoslib.exceptions.ActivityFailed: failed to connect to http://192.168.1.12:30571/all: HTTPConnectionPool(host='192.168.1.12', port=30571): Max retries exceeded with url: /all (Caused by ConnectTimeoutError(<urllib3.connection.HTTPConnection object at 0x7f99d1c40340>, 'Connection to 192.168.1.12 timed out. (connect timeout=3)'))\n"
+          ],
+          "start": "2021-01-25T13:01:39.434695",
+          "end": "2021-01-25T13:01:42.439857",
+          "duration": 3.005162,
+          "tolerance_met": false
         }
       ]
     },
-    "after": {
-      "steady_state_met": true,
-      "probes": [
-        {
-          "activity": {
-            "type": "action",
-            "name": "we-can-request-list-of-books",
-            "tolerance": 200,
-            "provider": {
-              "type": "http",
-              "timeout": 3,
-              "verify_tls": false,
-              "url": "http://192.168.1.12:30571/all"
-            }
-          },
-          "output": {
-            "status": 200,
-            "headers": {
-              "Content-Type": "application/json",
-              "Transfer-Encoding": "chunked",
-              "Date": "Wed, 09 Dec 2020 13:55:13 GMT",
-              "Keep-Alive": "timeout=60",
-              "Connection": "keep-alive"
-            },
-            "body": []
-          },
-          "status": "succeeded",
-          "start": "2020-12-09T13:55:13.980612",
-          "end": "2020-12-09T13:55:13.987397",
-          "duration": 0.006785,
-          "tolerance_met": true
-        }
-      ]
-    },
+    "after": null,
     "during": []
   },
-  "run": [
-    {
-      "activity": {
-        "type": "action",
-        "name": "delete-api-pod",
-        "provider": {
-          "type": "python",
-          "module": "chaosk8s.pod.actions",
-          "func": "delete_pods",
-          "arguments": {
-            "name": "book",
-            "label_selector": "app.kubernetes.io/name=load-book-api",
-            "ns": "default"
-          }
-        },
-        "pauses": {
-          "after": 10
-        }
-      },
-      "output": null,
-      "status": "succeeded",
-      "start": "2020-12-09T13:55:03.807230",
-      "end": "2020-12-09T13:55:03.820277",
-      "duration": 0.013047
-    },
-    {
-      "activity": {
-        "type": "action",
-        "name": "we-can-request-list-of-books",
-        "tolerance": 200,
-        "provider": {
-          "type": "http",
-          "timeout": 3,
-          "verify_tls": false,
-          "url": "http://192.168.1.12:30571/all"
-        }
-      },
-      "output": {
-        "status": 200,
-        "headers": {
-          "Content-Type": "application/json",
-          "Transfer-Encoding": "chunked",
-          "Date": "Wed, 09 Dec 2020 13:55:13 GMT",
-          "Keep-Alive": "timeout=60",
-          "Connection": "keep-alive"
-        },
-        "body": []
-      },
-      "status": "succeeded",
-      "start": "2020-12-09T13:55:13.829762",
-      "end": "2020-12-09T13:55:13.980272",
-      "duration": 0.15051
-    }
-  ],
+  "run": [],
   "rollbacks": [],
-  "end": "2020-12-09T13:55:13.987827",
-  "duration": 10.19205355644226
+  "end": "2021-01-25T13:01:42.440019",
+  "duration": 3.010312795639038
 }
